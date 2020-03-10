@@ -22,7 +22,9 @@ out
 **/target
 **/test
 *.properties
-!.mvn/wrapper/maven-wrapper.jar
+*.mvn
+mvnw
+*.cwd
 
 ### NetBeans ###
 /nbproject/private/
