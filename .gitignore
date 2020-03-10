@@ -21,6 +21,7 @@ target/
 out
 **/target
 **/test
+***/test
 *.properties
 *.mvn
 mvnw
