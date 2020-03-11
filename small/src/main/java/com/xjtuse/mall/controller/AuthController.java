@@ -1,4 +1,4 @@
-package com.xjtuse.mall.admin.auth;
+package com.xjtuse.mall.controller;
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class FirstSBController {
+public class AuthController {
     @RequestMapping("/auth/login")
     public Map login(@RequestBody HashMap data) {
 //        return "{\"errno\":0,\"data\":{\"adminInfo\":{\"nickName\":\"admin123\",\"avatar\":\"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif\"},\"token\":\"45963731-edae-4dd2-a54c-fe70266165ad\"},\"errmsg\":\"成功\"}";
@@ -43,6 +43,6 @@ public class FirstSBController {
 
     @RequestMapping("/dashboard")
     public String dashboard() {
-        return "{\"errno\":0,\"data\":{\"goodsTotal\":999999999999999999999999999999999999999999999999999999,\"userTotal\":10000000000000,\"productTotal\":241,\"orderTotal\":15},\"errmsg\":\"成功\"}";
+        return "{\"errno\":0,\"data\":{\"goodsTotal\":99999999999999999999,\"userTotal\":10000000000000,\"productTotal\":241,\"orderTotal\":15},\"errmsg\":\"成功\"}";
     }
 }
