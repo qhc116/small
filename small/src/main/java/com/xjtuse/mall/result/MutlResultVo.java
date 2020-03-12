@@ -1,28 +1,27 @@
 package com.xjtuse.mall.result;
 
 import java.util.List;
-import java.util.Map;
 
-public class ResultVo {
-    private Map data;
+public class MutlResultVo<T> {
+    private List<T> item;
     private String errmsg;
     private Integer errno;
 
     @Override
     public String toString() {
         return "ResultVo{" +
-                "data=" + data +
+                "item=" + item +
                 ", errmsg='" + errmsg + '\'' +
                 ", errno=" + errno +
                 '}';
     }
 
-    public void setData(Map data) {
-        this.data = data;
+    public List getItem() {
+        return item;
     }
 
-    public Map getData() {
-        return data;
+    public void setItem(List item) {
+        this.item = item;
     }
 
     public String getErrmsg() {

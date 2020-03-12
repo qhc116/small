@@ -1,9 +1,5 @@
 package com.xjtuse.mall.bean;
 
-/**
- * 用户表
- * @author cly
- */
 public class User {
     private int id;
     private String username;

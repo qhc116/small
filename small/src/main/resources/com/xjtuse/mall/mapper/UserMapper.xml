@@ -33,6 +33,26 @@
         where id=#{id}
     </select>
 
+    <select id="queryAll" resultMap="resultUserMap">
+        select
+        <include refid="Base_UserColumn_List"/>
+        from cskaoyan_mall_user
+        <where>
+            <if test="user.username != null">
+                username like "%"#{user.username}"%"
+            </if>
+            <if test="user.mobile != null">
+                and mobile like "%"#{user.mobile}"%"
+            </if>
+        </where>
+        order by #{pageUtil.sort} #{pageUtil.order} limit #{pageUtil.start},#{pageUtil.limit}
+    </select>
+
+    <select id="queryCount" resultType="Integer">
+        select count(id)
+        from cskaoyan_mall_user
+    </select>
+
 
     <!--    &lt;!&ndash;2 收货地址//////////////////////////////////////////////////////&ndash;&gt;-->
     <!--    <resultMap id="resultAddressMap" type="com.cskaoyan.mall_springboot.bean.user.Address">-->

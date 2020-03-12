@@ -19,6 +19,8 @@ public class AuthController {
         String password= (String)data.get("password");
         map.put("errno",0);
         map.put("errmsg","成功");
+        map.put("userTotal", 0);
+        map.put("total", 0);
         return map;
     }
 
