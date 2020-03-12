@@ -1,11 +1,8 @@
 package com.xjtuse.mall.utils;
 
-import com.xjtuse.mall.bean.User;
 import com.xjtuse.mall.result.ResultVo;
-import org.springframework.lang.Nullable;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * @author 失了秩

@@ -1,4 +1,4 @@
-package com.xjtuse.mall.bean;
+package com.xjtuse.mall.bean.user;
 
 public class User {
     private int id;
