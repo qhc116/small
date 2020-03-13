@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.xjtuse.mall.mapper.MallMapper">
-
+    <!--    分类//////////////////////////////////////-->
     <resultMap id="BaseResultMap" type="com.xjtuse.mall.bean.mall.Category">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
@@ -35,16 +35,63 @@
     </sql>
 
     <select id="queryParentCategory" resultMap="ParentResultMap">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from cskaoyan_mall_category
         where `level` = 'L1' and deleted = 0
     </select>
 
     <select id="queryChildrenCategory" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/>
+        select
+        <include refid="Base_Column_List"/>
         from cskaoyan_mall_category
         where `level` = 'L2' and deleted = 0 and pid = #{parentCategory.id}
     </select>
+
+    <!--    供应商//////////////////////////////////////-->
+    <resultMap id="BaseBrandMap" type="com.xjtuse.mall.bean.mall.Brand">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="desc" property="desc" jdbcType="VARCHAR"/>
+        <result column="pic_url" property="picUrl" jdbcType="VARCHAR"/>
+        <result column="sort_order" property="sortOrder" jdbcType="TINYINT"/>
+        <result column="floor_price" property="floorPrice" jdbcType="DECIMAL"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="BIT"/>
+    </resultMap>
+
+    <sql id="Base_Brand_List">
+        id, `name`, `desc`, pic_url, sort_order, floor_price, add_time, update_time, deleted
+    </sql>
+
+    <select id="queryBrand" resultMap="BaseBrandMap">
+        select <include refid="Base_Brand_List"/>
+        from cskaoyan_mall_brand
+        <where>
+            deleted = 0
+            <if test="brand.id != null">
+                and id like concat('%',concat(#{brand.id },'%'))
+            </if>
+        </where>
+        <if test="pageUtil.limit != null">
+            order by #{pageUtil.sort} #{pageUtil.order}
+            limit #{pageUtil.start},#{pageUtil.limit}
+        </if>
+    </select>
+
+    <select id="queryBrandCount" resultType="Integer">
+        select count(*) from cskaoyan_mall_brand
+        <where>
+            deleted = 0
+            <if test="brand.id != null">
+                and id like concat('%',concat(#{brand.id },'%'))
+            </if>
+        </where>
+    </select>
+
+
+
 
 </mapper>
 

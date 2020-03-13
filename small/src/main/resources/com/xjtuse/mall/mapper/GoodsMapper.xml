@@ -59,6 +59,36 @@
             </if>
         </where>
     </select>
+
+    <resultMap id="GoodsCatAndBrandMap" type="com.xjtuse.mall.bean.goods.GoodsCatAndBrand">
+        <id column="id" property="value" jdbcType="INTEGER"/>
+        <result column="name" property="label" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="GoodsParentCategoryMap" type="com.xjtuse.mall.bean.goods.ParentCategory">
+        <id column="id" property="value" jdbcType="INTEGER"/>
+        <result column="name" property="label" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryBrandForGoods" resultMap="GoodsCatAndBrandMap">
+        select id,`name`
+        from cskaoyan_mall_brand
+        where deleted = 0
+    </select>
+
+    <select id="queryL1CategoryForGoods" resultMap="GoodsParentCategoryMap">
+        select id,`name`
+        from cskaoyan_mall_category
+        where `level` = 'L1' and deleted = 0
+    </select>
+
+    <select id="queryL2CategoryForGoods" resultMap="GoodsCatAndBrandMap">
+        select id,`name`
+        from cskaoyan_mall_category
+        where `level` = 'L2' and deleted = 0 and pid = #{parentCategory.value}
+    </select>
+
 </mapper>
 
 

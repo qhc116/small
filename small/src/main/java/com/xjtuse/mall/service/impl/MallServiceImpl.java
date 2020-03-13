@@ -1,12 +1,14 @@
 package com.xjtuse.mall.service.impl;
 
+import com.xjtuse.mall.bean.mall.Brand;
 import com.xjtuse.mall.bean.mall.Category;
 import com.xjtuse.mall.bean.mall.ParentCategory;
 import com.xjtuse.mall.mapper.MallMapper;
-import com.xjtuse.mall.result.ResultVo;
-import com.xjtuse.mall.result.SingleResultVo;
+import com.xjtuse.mall.result.MapResultVo;
+import com.xjtuse.mall.result.ListResultVo;
 import com.xjtuse.mall.service.MallService;
-import com.xjtuse.mall.utils.MutiResultVoUtil;
+import com.xjtuse.mall.utils.ResultUtil;
+import com.xjtuse.mall.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,18 +26,30 @@ public class MallServiceImpl implements MallService {
     MallMapper mapper;
 
     @Override
-    public SingleResultVo queryCategory() {
+    public ListResultVo queryCategory() {
         List<ParentCategory> parentcategories = mapper.queryParentCategory();
         for (ParentCategory parentcategory : parentcategories) {
             List<Category> childrenCateGories = mapper.queryChildrenCategory(parentcategory);
             parentcategory.setChildren(childrenCateGories);
         }
-        return MutiResultVoUtil.categoryOk(parentcategories);
+        return ResultUtil.categoryOk(parentcategories);
     }
 
     @Override
-    public SingleResultVo queryCategoryL1() {
+    public ListResultVo queryCategoryL1() {
         List<ParentCategory> l1Categories = mapper.queryParentCategory();
-        return MutiResultVoUtil.categoryOk(l1Categories);
+        return ResultUtil.categoryOk(l1Categories);
+    }
+
+    @Override
+    public MapResultVo queryBrand(PageUtil pageUtil, Brand brand) {
+        if (pageUtil.getLimit() != null) {
+            pageUtil.initStart();
+        }
+
+
+        List<Brand> data = mapper.queryBrand(pageUtil, brand);
+        int count = mapper.queryBrandCount(brand);
+        return ResultUtil.ok(data, count);
     }
 }

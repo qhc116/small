@@ -1,28 +1,20 @@
 package com.xjtuse.mall.result;
 
-import java.util.List;
-import java.util.Map;
-
-public class ResultVo {
-    private Map data;
-    private String errmsg;
-    private Integer errno;
+/**
+ * @author 失了秩
+ * @date 2020/3/13 15:51
+ * @description
+ */
+public abstract class ResultVo {
+    String errmsg;
+    Integer errno;
 
     @Override
     public String toString() {
         return "ResultVo{" +
-                "data=" + data +
-                ", errmsg='" + errmsg + '\'' +
+                "errmsg='" + errmsg + '\'' +
                 ", errno=" + errno +
                 '}';
-    }
-
-    public void setData(Map data) {
-        this.data = data;
-    }
-
-    public Map getData() {
-        return data;
     }
 
     public String getErrmsg() {

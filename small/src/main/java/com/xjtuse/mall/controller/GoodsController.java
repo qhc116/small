@@ -1,6 +1,7 @@
 package com.xjtuse.mall.controller;
 
 import com.xjtuse.mall.bean.goods.Goods;
+import com.xjtuse.mall.result.MapResultVo;
 import com.xjtuse.mall.result.ResultVo;
 import com.xjtuse.mall.service.GoodsService;
 import com.xjtuse.mall.utils.PageUtil;
@@ -26,6 +27,11 @@ public class GoodsController {
     @RequestMapping("/goods/detail")
     public ResultVo goodsDetail(Goods goods) {
         return goodsService.queryDetail(goods);
+    }
+
+    @RequestMapping("/goods/catAndBrand")
+    public ResultVo catAndBrand(Goods goods) {
+        return goodsService.queryCatAndBrand();
     }
 
 }

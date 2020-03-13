@@ -1,7 +1,9 @@
 package com.xjtuse.mall.service;
 
-import com.xjtuse.mall.result.ResultVo;
-import com.xjtuse.mall.result.SingleResultVo;
+import com.xjtuse.mall.bean.mall.Brand;
+import com.xjtuse.mall.result.MapResultVo;
+import com.xjtuse.mall.result.ListResultVo;
+import com.xjtuse.mall.utils.PageUtil;
 
 /**
  * @author 失了秩
@@ -10,7 +12,9 @@ import com.xjtuse.mall.result.SingleResultVo;
  */
 public interface MallService {
 
-    SingleResultVo queryCategory();
+    ListResultVo queryCategory();
 
-    SingleResultVo queryCategoryL1();
+    ListResultVo queryCategoryL1();
+
+    MapResultVo queryBrand(PageUtil pageUtil, Brand brand);
 }
