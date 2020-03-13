@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xjtuse.mall.mapper.GoodsMapper">
+
+    <!--   商品表////////////////////////////////////-->
+    <resultMap id="BaseResultMap" type="com.xjtuse.mall.bean.goods.Goods">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="goods_sn" property="goodsSn" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="category_id" property="categoryId" jdbcType="INTEGER"/>
+        <result column="brand_id" property="brandId" jdbcType="INTEGER"/>
+        <result column="gallery" property="gallery" jdbcType="VARCHAR"/>
+        <result column="keywords" property="keywords" jdbcType="VARCHAR"/>
+        <result column="brief" property="brief" jdbcType="VARCHAR"/>
+        <result column="is_on_sale" property="isOnSale" jdbcType="BIT"/>
+        <result column="sort_order" property="sortOrder" jdbcType="SMALLINT"/>
+        <result column="pic_url" property="picUrl" jdbcType="VARCHAR"/>
+        <result column="share_url" property="shareUrl" jdbcType="VARCHAR"/>
+        <result column="is_new" property="isNew" jdbcType="BIT"/>
+        <result column="is_hot" property="isHot" jdbcType="BIT"/>
+        <result column="unit" property="unit" jdbcType="VARCHAR"/>
+        <result column="counter_price" property="counterPrice" jdbcType="DECIMAL"/>
+        <result column="retail_price" property="retailPrice" jdbcType="DECIMAL"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="BIT"/>
+        <result column="detail" property="detail" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, goods_sn, `name`, category_id, brand_id, gallery, keywords, brief, is_on_sale,
+        sort_order, pic_url, share_url, is_new, is_hot, unit, counter_price, retail_price,
+        add_time, update_time, deleted, detail
+    </sql>
+
+    <select id="queryGoods" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cskaoyan_mall_goods
+        <where>
+            <if test="goods.goodsSn != null">
+                goods_sn like concat('%',concat(#{goods.goodsSn},'%'))
+            </if>
+            <if test="goods.name != null">
+                and `name` like concat('%',concat(#{goods.name},'%'))
+            </if>
+        </where>
+        order by #{pageUtil.sort} #{pageUtil.order} limit #{pageUtil.start},#{pageUtil.limit}
+    </select>
+
+    <select id="queryGoodsCount" resultType="Integer">
+        select count(*) from cskaoyan_mall_goods
+        <where>
+            <if test="goods.goodsSn != null">
+                goods_sn like concat('%',concat(#{goods.goodsSn},'%'))
+            </if>
+            <if test="goods.name != null">
+                and `name` like concat('%',concat(#{goods.name},'%' ))
+            </if>
+        </where>
+    </select>
+</mapper>
+
+

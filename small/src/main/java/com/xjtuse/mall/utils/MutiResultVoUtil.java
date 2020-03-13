@@ -1,8 +1,11 @@
 package com.xjtuse.mall.utils;
 
 import com.xjtuse.mall.result.ResultVo;
+import com.xjtuse.mall.result.SingleResultVo;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 失了秩
@@ -22,6 +25,13 @@ public class MutiResultVoUtil {
         return resultVo;
     }
 
+    public static SingleResultVo categoryOk(List data) {
+        SingleResultVo resultVo = new SingleResultVo();
+        resultVo.setData(data);
+        resultVo.setErrmsg("成功");
+        resultVo.setErrno(0);
+        return resultVo;
+    }
 //    public static ResultVo ok(Object data, Integer errno, String errmsg) {
 //        ResultVo<Object> resultVo = new ResultVo<>();
 //        resultVo.setData(data);

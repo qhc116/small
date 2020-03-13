@@ -2,26 +2,26 @@ package com.xjtuse.mall.result;
 
 import java.util.List;
 
-public class MutlResultVo<T> {
-    private List<T> item;
+public class SingleResultVo<T> {
+    public List<T> getData() {
+        return data;
+    }
+
+    public void setData(List<T> data) {
+        this.data = data;
+    }
+
+    private List<T> data;
     private String errmsg;
     private Integer errno;
 
     @Override
     public String toString() {
-        return "ResultVo{" +
-                "item=" + item +
+        return "SingleResultVo{" +
+                "data=" + data +
                 ", errmsg='" + errmsg + '\'' +
                 ", errno=" + errno +
                 '}';
-    }
-
-    public List getItem() {
-        return item;
-    }
-
-    public void setItem(List item) {
-        this.item = item;
     }
 
     public String getErrmsg() {
