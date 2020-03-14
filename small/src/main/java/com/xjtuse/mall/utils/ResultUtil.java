@@ -1,5 +1,8 @@
 package com.xjtuse.mall.utils;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
+import com.xjtuse.mall.bean.system.Storage;
+import com.xjtuse.mall.result.BaseResultVo;
 import com.xjtuse.mall.result.MapResultVo;
 import com.xjtuse.mall.result.ListResultVo;
 import com.xjtuse.mall.result.ResultVo;
@@ -15,6 +18,13 @@ import java.util.Map;
  * @description errno：  0成功 1失败
  */
 public class ResultUtil {
+    public static BaseResultVo baseResultVoOk(Storage o) {
+        BaseResultVo baseResultVo = new BaseResultVo();
+        baseResultVo.setData(o);
+        baseResultVo.setErrmsg("成功");
+        baseResultVo.setErrno(0);
+        return baseResultVo;
+    }
 
     public static MapResultVo ok(Object data, Integer total) {
         MapResultVo mapResultVo = new MapResultVo();
