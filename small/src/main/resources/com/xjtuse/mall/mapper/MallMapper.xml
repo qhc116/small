@@ -73,6 +73,9 @@
             <if test="brand.id != null">
                 and id like concat('%',concat(#{brand.id },'%'))
             </if>
+            <if test="brand.name != null">
+                and name like concat('%',concat(#{brand.name },'%'))
+            </if>
         </where>
         <if test="pageUtil.limit != null">
             order by #{pageUtil.sort} #{pageUtil.order}
@@ -90,7 +93,32 @@
         </where>
     </select>
 
+    <select id="queryAllRegion" resultType="com.xjtuse.mall.bean.mall.Region">
+        select id, pid, name, type, code from cskaoyan_mall_region
+    </select>
 
+    <update id="updateBrandInfo">
+        update cskaoyan_mall_brand set
+        `name` = #{name},
+        `desc` = #{desc},
+        pic_url = #{picUrl},
+        floor_price = #{floorPrice},
+        update_time = #{updateTime}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <delete id="deleteBrand">
+        delete from cskaoyan_mall_brand where id = #{id}
+    </delete>
+
+    <insert id="createBrand">
+        insert into cskaoyan_mall_brand
+        (`name`, `desc`, pic_url, floor_price, add_time, update_time)
+        values
+        (#{name}, #{desc}, #{picUrl}, #{floorPrice}, #{addTime}, #{updateTime})
+    </insert>
 
 
 </mapper>

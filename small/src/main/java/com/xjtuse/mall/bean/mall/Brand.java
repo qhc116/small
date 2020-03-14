@@ -93,4 +93,6 @@ public class Brand {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
+
+
 }

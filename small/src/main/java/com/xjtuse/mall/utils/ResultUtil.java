@@ -3,6 +3,7 @@ package com.xjtuse.mall.utils;
 import com.xjtuse.mall.result.MapResultVo;
 import com.xjtuse.mall.result.ListResultVo;
 import com.xjtuse.mall.result.ResultVo;
+import com.xjtuse.mall.result.TResultVo;
 import org.springframework.lang.Nullable;
 
 import java.util.HashMap;
@@ -54,5 +55,19 @@ public class ResultUtil {
         return resultVo;
     }
 
+    public static TResultVo genSuccessResult(Object data){
+        TResultVo resultVo = new TResultVo();
+        resultVo.setData(data);
+        resultVo.setErrmsg("成功");
+        resultVo.setErrno(0);
+        return resultVo;
+    }
+
+    public static TResultVo genSuccessResult(){
+        TResultVo resultVo = new TResultVo();
+        resultVo.setErrmsg("成功");
+        resultVo.setErrno(0);
+        return resultVo;
+    }
 
 }

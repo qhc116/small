@@ -3,6 +3,7 @@ package com.xjtuse.mall.mapper;
 import com.xjtuse.mall.bean.mall.Brand;
 import com.xjtuse.mall.bean.mall.Category;
 import com.xjtuse.mall.bean.mall.ParentCategory;
+import com.xjtuse.mall.bean.mall.Region;
 import com.xjtuse.mall.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 
@@ -19,4 +20,12 @@ public interface MallMapper {
 
     List<Brand> queryBrand(@Param("pageUtil") PageUtil pageUtil,@Param("brand")  Brand brand);
     int queryBrandCount(@Param("brand") Brand brand);
+
+    List<Region> queryAllRegion();
+
+    void updateBrandInfo(Brand brand);
+
+    void deleteBrand(Brand brand);
+
+    void createBrand(Brand brand);
 }
