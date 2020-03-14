@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 /**
  * @author 失了秩
@@ -19,22 +20,22 @@ import java.security.NoSuchAlgorithmException;
 public class FileUploadUtil {
 
     public static Storage init(MultipartFile file) {
-        transfer(file);
-        String md5 = getFileMD5(file);
+        String uuid = UUIDUtils.getUUID();
+        transfer(file, uuid);
         Storage storage = new Storage();
         storage.setName(file.getOriginalFilename());
         storage.setDeleted(false);
-        storage.setUrl("http://122.51.199.160:8080/admin/storage/fetch/" + md5);
+        storage.setUrl("http://localhost:6001/admin/storage/fetch/" + uuid + ".png");
         storage.setSize((int) file.getSize());
         storage.setType(file.getContentType());
-        storage.setKey(md5);
+        storage.setKey(uuid);
         return storage;
     }
 
-    public static void transfer(MultipartFile file) {
+    public static void transfer(MultipartFile file, String uuid) {
         try {
             File path =
-                    new File("small/src/main/resources/static/" + file.getOriginalFilename());
+                    new File("small/src/main/resources/static/" + uuid + ".png" );
             if (!path.getParentFile().exists()) {
                 path.getParentFile().mkdirs();
             }
@@ -45,18 +46,5 @@ public class FileUploadUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static String getFileMD5(MultipartFile file) {
-        MessageDigest digest = null;
-        String md5 = null;
-        try {
-            digest = MessageDigest.getInstance("md5");
-            md5 = digest.digest(file.getBytes()).toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return md5;
     }
 }
