@@ -57,10 +57,10 @@ public class MallController {
     }
 
     //上传品牌商图片
-    @RequestMapping("/storage/create")
-    public TResultVo uploadBrand(@RequestParam("file") MultipartFile multipartFile){
-        return mallService.uploadBrandImg(multipartFile);
-    }
+//    @RequestMapping("/storage/create")
+//    public TResultVo uploadBrand(@RequestParam("file") MultipartFile multipartFile){
+//        return mallService.uploadBrandImg(multipartFile);
+//    }
 
     //上传新的品牌商
     @RequestMapping("/brand/create")
