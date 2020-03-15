@@ -34,4 +34,5 @@ public class GoodsController {
         return goodsService.queryCatAndBrand();
     }
 
+
 }

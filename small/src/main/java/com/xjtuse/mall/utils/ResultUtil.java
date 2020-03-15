@@ -2,11 +2,7 @@ package com.xjtuse.mall.utils;
 
 import com.fasterxml.jackson.databind.ser.Serializers;
 import com.xjtuse.mall.bean.system.Storage;
-import com.xjtuse.mall.result.BaseResultVo;
-import com.xjtuse.mall.result.MapResultVo;
-import com.xjtuse.mall.result.ListResultVo;
-import com.xjtuse.mall.result.ResultVo;
-import com.xjtuse.mall.result.TResultVo;
+import com.xjtuse.mall.result.*;
 import org.springframework.lang.Nullable;
 
 import java.util.HashMap;
@@ -54,7 +50,8 @@ public class ResultUtil {
         return mapResultVo;
     }
 
-    public static ResultVo fail(ResultVo resultVo, @Nullable Integer errno, @Nullable String errmsg) {
+    public static ResultVo fail(@Nullable Integer errno, @Nullable String errmsg) {
+        ResultVo resultVo = new ErrResultVo();
         if (errno == null || errmsg == null) {
             resultVo.setErrmsg("失败，请联系管理员");
             resultVo.setErrno(0);

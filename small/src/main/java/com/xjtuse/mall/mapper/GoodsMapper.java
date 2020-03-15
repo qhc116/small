@@ -1,8 +1,6 @@
 package com.xjtuse.mall.mapper;
 
-import com.xjtuse.mall.bean.goods.Goods;
-import com.xjtuse.mall.bean.goods.ParentCategory;
-import com.xjtuse.mall.bean.user.*;
+import com.xjtuse.mall.bean.goods.*;
 import com.xjtuse.mall.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,6 +15,13 @@ public interface GoodsMapper {
     List queryL1CategoryForGoods();
     List queryL2CategoryForGoods(@Param("parentCategory") ParentCategory parentCategory);
 
+    Goods queryGoodsById(@Param("goods") Goods goods);
 
+    List<GoodsAttribute> queryGoodsAttributeByConditions(@Param("goods") Goods goods);
 
+    List<GoodsProduct> queryProductsById(@Param("goods") Goods goods);
+
+    List<GoodsSpecification> queryGoodsSpecificationsById(@Param("goods") Goods goods);
+
+    int queryL1CatByCid(Integer categoryId);
 }

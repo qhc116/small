@@ -10,7 +10,7 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="category_id" property="categoryId" jdbcType="INTEGER"/>
         <result column="brand_id" property="brandId" jdbcType="INTEGER"/>
-        <result column="gallery" property="gallery" jdbcType="VARCHAR"/>
+        <result property="gallery" column="Gallery" typeHandler="com.xjtuse.mall.datahandler.String2StringArray"/>
         <result column="keywords" property="keywords" jdbcType="VARCHAR"/>
         <result column="brief" property="brief" jdbcType="VARCHAR"/>
         <result column="is_on_sale" property="isOnSale" jdbcType="BIT"/>
@@ -57,6 +57,40 @@
             <if test="goods.name != null">
                 and `name` like concat('%',concat(#{goods.name},'%' ))
             </if>
+
+        </where>
+    </select>
+
+    <select id="queryGoodsById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from cskaoyan_mall_goods
+        <where>
+            deleted = 0
+            and id = #{goods.id}
+        </where>
+    </select>
+
+    <resultMap id="GoodsAttributeMap" type="com.xjtuse.mall.bean.goods.GoodsAttribute">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="goods_id" property="goodsId" jdbcType="INTEGER"/>
+        <result column="attribute" property="attribute" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Goods_attribute_List">
+    id, goods_id, attribute, `value`, add_time, update_time
+  </sql>
+
+    <select id="queryGoodsAttributeByConditions" resultMap="GoodsAttributeMap">
+        select
+        <include refid="Goods_attribute_List"/>
+        from cskaoyan_mall_goods_attribute
+        <where>
+            deleted = 0
+            and goods_id = #{goods.id}
         </where>
     </select>
 
@@ -64,6 +98,7 @@
         <id column="id" property="value" jdbcType="INTEGER"/>
         <result column="name" property="label" jdbcType="VARCHAR"/>
     </resultMap>
+
 
     <resultMap id="GoodsParentCategoryMap" type="com.xjtuse.mall.bean.goods.ParentCategory">
         <id column="id" property="value" jdbcType="INTEGER"/>
@@ -83,12 +118,58 @@
         where `level` = 'L1' and deleted = 0
     </select>
 
+    <select id="queryL1CatByCid" resultType="Integer">
+        select pid from cskaoyan_mall_category where id = #{id}
+    </select>
+
     <select id="queryL2CategoryForGoods" resultMap="GoodsCatAndBrandMap">
         select id,`name`
         from cskaoyan_mall_category
         where `level` = 'L2' and deleted = 0 and pid = #{parentCategory.value}
     </select>
 
+    <resultMap id="GoodsProducttMap" type="com.xjtuse.mall.bean.goods.GoodsProduct">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="goods_id" property="goodsId" jdbcType="INTEGER"/>
+        <result column="specifications" property="specifications" typeHandler="com.xjtuse.mall.datahandler.String2StringArray"/>
+        <result column="price" property="price" jdbcType="DECIMAL"/>
+        <result column="number" property="number" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="deleted" property="deleted" jdbcType="BIT"/>
+    </resultMap>
+    <sql id="Goods_Product_List">
+    id, goods_id, specifications, price, `number`, url, add_time, update_time
+    </sql>
+
+    <select id="queryProductsById" resultMap="GoodsProducttMap">
+        select
+        <include refid="Goods_Product_List"/>
+        from cskaoyan_mall_goods_product
+        where deleted = 0
+        and goods_id = #{goods.id}
+    </select>
+
+    <resultMap id="GoodsSpecificationMap" type="com.xjtuse.mall.bean.goods.GoodsSpecification">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="goods_id" property="goodsId" jdbcType="INTEGER"/>
+        <result column="specification" property="specification" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <result column="pic_url" property="picUrl" jdbcType="VARCHAR"/>
+        <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Goods_Specification_List">
+    id, goods_id, specification, value, pic_url, add_time, update_time
+    </sql>
+
+    <select id="queryGoodsSpecificationsById" resultMap="GoodsSpecificationMap">
+        select <include refid="Goods_Specification_List"/>
+        from cskaoyan_mall_goods_specification
+        where deleted = 0
+        and goods_id = #{goods.id}
+    </select>
 </mapper>
 
 
