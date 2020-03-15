@@ -79,6 +79,29 @@
         <result column="deleted" property="deleted"/>
     </resultMap>
 
+    <!--问题表-->
+    <resultMap id="IssueResultMap" type="com.xjtuse.mall.bean.mall.Issue">
+        <result column="id" property="id"/>
+        <result column="question" property="question"/>
+        <result column="answer" property="answer"/>
+        <result column="add_time" property="addTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!--关键字 表-->
+    <resultMap id="KeywordResultMap" type="com.xjtuse.mall.bean.mall.Keyword">
+        <result column="id" property="id"/>
+        <result column="keyword" property="keyword"/>
+        <result column="url" property="url"/>
+        <result column="is_hot" property="isHot"/>
+        <result column="is_default" property="isDefault"/>
+        <result column="sort_order" property="sortOrder"/>
+        <result column="add_time" property="addTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
         id, `name`, keywords, `desc`, pid, icon_url, pic_url, `level`, sort_order, add_time, update_time, deleted
     </sql>
@@ -89,6 +112,14 @@
 
     <sql id="Base_Order_List">
         id, user_id, order_sn, order_status, consignee, mobile, address, message, goods_price, freight_price, coupon_price, integral_price, groupon_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, comments, end_time, add_time, update_time, deleted
+    </sql>
+
+    <sql id="Order_Goods_List">
+        id, order_id, goods_id, goods_name, goods_sn, product_id, `number`, price, specifications, pic_url, comment, add_time, update_time, deleted
+    </sql>
+
+    <sql id="Issue_Column_List">
+        id, question, answer, add_time, update_time, deleted
     </sql>
 
     <select id="queryParentCategory" resultMap="ParentResultMap">
@@ -254,25 +285,118 @@
         select
         <include refid="Base_Order_List"/>
         from cskaoyan_mall_order
-        where id = #{id};
+        where id = #{id} and deleted = 0
     </select>
 
-    <sql id="Order_Goods_List">
-        id, order_id, goods_id, goods_name, goods_sn, product_id, `number`, price, specifications, pic_url, comment, add_time, update_time, deleted
-    </sql>
+
 
     <select id="queryOAGByOrderId" resultMap="OrderAndGoodsMap">
         select
          <include refid="Order_Goods_List"/>
          from cskaoyan_mall_order_goods
-         where order_id = #{id}
+         where order_id = #{id} and deleted = 0
     </select>
 
     <select id="queryUserById" resultType="com.xjtuse.mall.bean.user.User">
         select id, username, password, gender, birthday, last_login_time, last_login_ip, user_level, nickname, mobile, avatar, weixin_openid, status, add_time, update_time, deleted
         from cskaoyan_mall_user
-        where id = #{userId}
+        where id = #{userId} and deleted = 0
     </select>
+
+
+
+    <select id="queryIssue" resultMap="IssueResultMap">
+        select
+        <include refid="Issue_Column_List"/>
+        from cskaoyan_mall_issue
+        where deleted = 0
+        <if test="issue.question != null and issue.question != ''">
+            and question like concat('%',concat(#{issue.question},'%'))
+        </if>
+        <if test="pageUtil.page != null">
+            order by #{pageUtil.sort} #{pageUtil.order}
+            limit #{pageUtil.start}, #{pageUtil.limit}
+        </if>
+    </select>
+
+    <select id="queryIssueCount" resultType="int">
+        select count(*)
+        from cskaoyan_mall_issue
+        where deleted = 0
+        <if test="issue.question != null and issue.question != ''">
+            and question like concat('%',concat(#{issue.question},'%'))
+        </if>
+    </select>
+
+    <update id="updateIssue">
+        update cskaoyan_mall_issue
+        set
+        question = #{question},
+        answer = #{answer},
+        add_time = #{addTime},
+        update_time = #{updateTime},
+        deleted = #{deleted}
+        where id = #{id}
+    </update>
+
+    <update id="deleteIssue">
+        update cskaoyan_mall_issue
+        set
+        deleted = #{deleted}
+        where id = #{id}
+    </update>
+
+    <insert id="createIssue">
+        insert into cskaoyan_mall_issue
+        (question, answer, add_time, update_time, deleted)
+        values
+        (#{question}, #{answer}, #{addTime}, #{updateTime}, #{deleted})
+    </insert>
+
+    <sql id="Base_Keyword_List">
+        id, keyword, url, is_hot, is_default, sort_order, add_time, update_time, deleted
+    </sql>
+
+    <select id="queryKeyword" resultMap="KeywordResultMap">
+        select
+        <include refid="Base_Keyword_List"/>
+        from cskaoyan_mall_keyword
+        where deleted = 0
+<!--        <if test="issue.question != null and issue.question != ''">-->
+<!--            and question like concat('%',concat(#{issue.question},'%'))-->
+<!--        </if>-->
+        <if test="pageUtil.page != null">
+            order by #{pageUtil.sort} #{pageUtil.order}
+            limit #{pageUtil.start}, #{pageUtil.limit}
+        </if>
+    </select>
+
+    <select id="queryKeywordCount" resultType="int">
+        select count(*)
+        from cskaoyan_mall_keyword
+        where deleted = 0
+    </select>
+
+    <update id="updateKeyword">
+        update cskaoyan_mall_keyword
+        set
+        keyword = #{keyword},
+        url = #{url},
+        is_hot = #{isHot},
+        is_default = #{isDefault},
+        sort_order = #{sortOrder},
+        add_time = #{addTime},
+        update_time = #{updateTime},
+        deleted = #{deleted}
+        where id = #{id}
+    </update>
+
+    <update id="deleteKeyword">
+        update cskaoyan_mall_keyword
+        set
+        deleted = #{deleted}
+        where id = #{id}
+    </update>
 
 </mapper>
 

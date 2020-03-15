@@ -11,6 +11,7 @@ import com.xjtuse.mall.utils.ResultUtil;
 import com.xjtuse.mall.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -78,6 +79,7 @@ public class MallServiceImpl implements MallService {
     @Override
     public TResultVo deleteBrand(Brand brand) {
         brand.setDeleted(true);
+        brand.setUpdateTime(new Date());
         mapper.deleteBrand(brand);
         return ResultUtil.genSuccessResult();
     }
@@ -129,6 +131,7 @@ public class MallServiceImpl implements MallService {
     @Override
     public TResultVo deleteCategory(Category category) {
         category.setDeleted(true);
+        category.setUpdateTime(new Date());
         mapper.deleteCategory(category);
         return ResultUtil.genSuccessResult();
     }
@@ -159,5 +162,64 @@ public class MallServiceImpl implements MallService {
         map.put("order", realOrder);
         map.put("orderGoods", orderAndGoods);
         return ResultUtil.genSuccessResult(map);
+    }
+
+    @Override
+    public MapResultVo queryIssue(PageUtil pageUtil, Issue issue) {
+        if (pageUtil.getLimit() != null) {
+            pageUtil.initStart();
+        }
+        List<Issue> issues = mapper.queryIssue(pageUtil, issue);
+        int count = mapper.queryIssueCount(pageUtil, issue);
+        return ResultUtil.ok(issues, count);
+    }
+
+    @Override
+    public TResultVo updateIssue(Issue issue) {
+        issue.setUpdateTime(new Date());
+        mapper.updateIssue(issue);
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public TResultVo deleteIssue(Issue issue) {
+        issue.setDeleted(true);
+        issue.setUpdateTime(new Date());
+        mapper.deleteIssue(issue);
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public TResultVo createIssue(Issue issue) {
+        issue.setAddTime(new Date());
+        issue.setUpdateTime(new Date());
+        issue.setDeleted(false);
+        mapper.createIssue(issue);
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public MapResultVo queryKeyword(PageUtil pageUtil, Keyword keyword) {
+        if (pageUtil.getLimit() != null) {
+            pageUtil.initStart();
+        }
+        List<Keyword> keywords = mapper.queryKeyword(pageUtil, keyword);
+        int count = mapper.queryKeywordCount(pageUtil, keyword);
+        return ResultUtil.ok(keywords, count);
+    }
+
+    @Override
+    public TResultVo updateKeyword(Keyword keyword) {
+        keyword.setUpdateTime(new Date());
+        mapper.updateKeyword(keyword);
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public TResultVo deleteKeyword(Keyword keyword) {
+        keyword.setUpdateTime(new Date());
+        keyword.setDeleted(true);
+        mapper.deleteKeyword(keyword);
+        return ResultUtil.genSuccessResult();
     }
 }

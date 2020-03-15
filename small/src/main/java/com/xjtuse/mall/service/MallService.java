@@ -1,14 +1,13 @@
 package com.xjtuse.mall.service;
 
 import com.sun.org.apache.xpath.internal.operations.Or;
-import com.xjtuse.mall.bean.mall.Brand;
-import com.xjtuse.mall.bean.mall.Category;
-import com.xjtuse.mall.bean.mall.Order;
+import com.xjtuse.mall.bean.mall.*;
 import com.xjtuse.mall.result.*;
 import com.xjtuse.mall.utils.PageUtil;
 import com.xjtuse.mall.utils.ResultUtil;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Key;
 import java.util.Map;
 
 /**
@@ -45,4 +44,18 @@ public interface MallService {
     int queryOrderCount(PageUtil pageUtil, Order order, int[] orderStatusArray);
 
     TResultVo queryOrderById(Order order);
+
+    MapResultVo queryIssue(PageUtil pageUtil, Issue issue);
+
+    TResultVo updateIssue(Issue issue);
+
+    TResultVo deleteIssue(Issue issue);
+
+    TResultVo createIssue(Issue issue);
+
+    MapResultVo queryKeyword(PageUtil pageUtil, Keyword keyword);
+
+    TResultVo updateKeyword(Keyword keyword);
+
+    TResultVo deleteKeyword(Keyword keyword);
 }

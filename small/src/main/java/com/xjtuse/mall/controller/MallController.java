@@ -1,8 +1,6 @@
 package com.xjtuse.mall.controller;
 
-import com.xjtuse.mall.bean.mall.Brand;
-import com.xjtuse.mall.bean.mall.Category;
-import com.xjtuse.mall.bean.mall.Order;
+import com.xjtuse.mall.bean.mall.*;
 import com.xjtuse.mall.result.*;
 import com.xjtuse.mall.service.MallService;
 import com.xjtuse.mall.utils.PageUtil;
@@ -10,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Key;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -90,8 +89,52 @@ public class MallController {
         return mallService.queryOrder(pageUtil, order, orderStatusArray);
     }
 
+    //订单详情
     @RequestMapping("/order/detail")
     public TResultVo queryOrderDetailById(Order order){
         return mallService.queryOrderById(order);
+    }
+
+    //查询问题
+    @RequestMapping("/issue/list")
+    public MapResultVo queryIssue(PageUtil pageUtil, Issue issue){
+        return mallService.queryIssue(pageUtil, issue);
+    }
+
+    //更新问题
+    @RequestMapping("/issue/update")
+    public TResultVo updateIssue(@RequestBody Issue issue){
+        return mallService.updateIssue(issue);
+    }
+
+    //删除问题
+    @RequestMapping("/issue/delete")
+    public TResultVo deleteIssue(@RequestBody Issue issue){
+        return mallService.deleteIssue(issue);
+    }
+
+    //添加问题
+    @RequestMapping("/issue/create")
+    public TResultVo createIssue(@RequestBody Issue issue){
+        return mallService.createIssue(issue);
+    }
+
+    //查询关键字
+    @RequestMapping("/keyword/list")
+    public MapResultVo queryKeyword(PageUtil pageUtil, Keyword keyword){
+        return  mallService.queryKeyword(pageUtil, keyword);
+    }
+
+    //更新关键字
+    //接收的isHot和isDefault参数始终是错的
+    @RequestMapping("/keyword/update")
+    public TResultVo updateKeyword(@RequestBody Keyword keyword){
+        return mallService.updateKeyword(keyword);
+    }
+
+    //删除关键字
+    @RequestMapping("/keyword/delete")
+    public TResultVo deleteKeyword(@RequestBody Keyword keyword){
+        return mallService.deleteKeyword(keyword);
     }
 }

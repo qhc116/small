@@ -5,6 +5,7 @@ import com.xjtuse.mall.bean.user.User;
 import com.xjtuse.mall.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 
+import java.security.Key;
 import java.util.List;
 
 /**
@@ -34,7 +35,6 @@ public interface MallMapper {
     void deleteCategory(Category category);
 
     List<Order> queryOrder(@Param("pageUtil") PageUtil pageUtil, @Param("order") Order order, @Param("orderStatusArray") int[] orderStatusArray);
-
     int queryOrderCount(@Param("pageUtil") PageUtil pageUtil, @Param("order") Order order, @Param("orderStatusArray") int[] orderStatusArray);
 
     Order queryOrderById(Order order);
@@ -42,4 +42,20 @@ public interface MallMapper {
     List<OrderAndGoods> queryOAGByOrderId(Order order);
 
     User queryUserById(Order order);
+
+    List<Issue> queryIssue(@Param("pageUtil") PageUtil pageUtil, @Param("issue") Issue issue);
+    int queryIssueCount(@Param("pageUtil") PageUtil pageUtil, @Param("issue") Issue issue);
+
+    void updateIssue(Issue issue);
+
+    void deleteIssue(Issue issue);
+
+    void createIssue(Issue issue);
+
+    List<Keyword> queryKeyword(@Param("pageUtil") PageUtil pageUtil, @Param("keyword") Keyword keyword);
+    int queryKeywordCount(@Param("pageUtil") PageUtil pageUtil, @Param("keyword") Keyword keyword);
+
+    void updateKeyword(Keyword keyword);
+
+    void deleteKeyword(Keyword keyword);
 }
