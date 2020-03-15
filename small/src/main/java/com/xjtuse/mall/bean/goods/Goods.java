@@ -2,6 +2,7 @@ package com.xjtuse.mall.bean.goods;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class Goods {
     private Integer id;
@@ -14,7 +15,7 @@ public class Goods {
 
     private Integer brandId;
 
-    private String gallery;
+    private String[] gallery;
 
     private String keywords;
 
@@ -86,12 +87,36 @@ public class Goods {
         this.brandId = brandId;
     }
 
-    public String getGallery() {
+    public Boolean getOnSale() {
+        return isOnSale;
+    }
+
+    public void setOnSale(Boolean onSale) {
+        isOnSale = onSale;
+    }
+
+    public Boolean getNew() {
+        return isNew;
+    }
+
+    public void setNew(Boolean aNew) {
+        isNew = aNew;
+    }
+
+    public Boolean getHot() {
+        return isHot;
+    }
+
+    public void setHot(Boolean hot) {
+        isHot = hot;
+    }
+
+    public String[] getGallery() {
         return gallery;
     }
 
-    public void setGallery(String gallery) {
-        this.gallery = gallery == null ? null : gallery.trim();
+    public void setGallery(String[] gallery) {
+        this.gallery = gallery;
     }
 
     public String getKeywords() {
