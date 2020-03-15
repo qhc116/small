@@ -30,8 +30,65 @@
         <result column="add_time" property="addTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
+
+    <!--订单map-->
+    <resultMap id="OrderResultMap" type="com.xjtuse.mall.bean.mall.Order">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="order_sn" property="orderSn"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="consignee" property="consignee"/>
+        <result column="mobile" property="mobile"/>
+        <result column="address" property="address"/>
+        <result column="message" property="message"/>
+        <result column="goods_price" property="goodsPrice"/>
+        <result column="freight_price" property="freightPrice"/>
+        <result column="coupon_price" property="couponPrice"/>
+        <result column="integral_price" property="integralPrice"/>
+        <result column="groupon_price" property="grouponPrice"/>
+        <result column="order_price" property="orderPrice"/>
+        <result column="actual_price" property="actualPrice"/>
+        <result column="pay_id" property="payId"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="ship_sn" property="shipSn"/>
+        <result column="ship_channel" property="shipChannel"/>
+        <result column="ship_time" property="shipTime"/>
+        <result column="confirm_time" property="confirmTime"/>
+        <result column="comments" property="comments"/>
+        <result column="end_time" property="endTime"/>
+        <result column="add_time" property="addTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
+    <!--订单货物表-->
+    <resultMap id="OrderAndGoodsMap" type="com.xjtuse.mall.bean.mall.OrderAndGoods">
+        <result column="id" property="id"/>
+        <result column="orderId" property="orderId"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="goods_name" property="goodsName"/>
+        <result column="goods_sn" property="goodsSn"/>
+        <result column="product_id" property="productId"/>
+        <result column="number" property="number"/>
+        <result column="price" property="price"/>
+        <result column="specifications" property="specifications"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="comment" property="comment"/>
+        <result column="add_time" property="addTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="deleted" property="deleted"/>
+    </resultMap>
+
     <sql id="Base_Column_List">
-        id, `name`, keywords, `desc`, pid, icon_url, pic_url, `level`, sort_order, add_time, update_time
+        id, `name`, keywords, `desc`, pid, icon_url, pic_url, `level`, sort_order, add_time, update_time, deleted
+    </sql>
+
+    <sql id="Base_Brand_List">
+        id, `name`, `desc`, pic_url, sort_order, floor_price, add_time, update_time, deleted
+    </sql>
+
+    <sql id="Base_Order_List">
+        id, user_id, order_sn, order_status, consignee, mobile, address, message, goods_price, freight_price, coupon_price, integral_price, groupon_price, order_price, actual_price, pay_id, pay_time, ship_sn, ship_channel, ship_time, confirm_time, comments, end_time, add_time, update_time, deleted
     </sql>
 
     <select id="queryParentCategory" resultMap="ParentResultMap">
@@ -61,9 +118,6 @@
         <result column="deleted" property="deleted" jdbcType="BIT"/>
     </resultMap>
 
-    <sql id="Base_Brand_List">
-        id, `name`, `desc`, pic_url, sort_order, floor_price, add_time, update_time, deleted
-    </sql>
 
     <select id="queryBrand" resultMap="BaseBrandMap">
         select <include refid="Base_Brand_List"/>
@@ -109,9 +163,13 @@
         </where>
     </update>
 
-    <delete id="deleteBrand">
-        delete from cskaoyan_mall_brand where id = #{id}
-    </delete>
+    <update id="deleteBrand">
+        update cskaoyan_mall_brand set
+        deleted = #{deleted}
+        <where>
+            id = #{id}
+        </where>
+    </update>
 
     <insert id="createBrand">
         insert into cskaoyan_mall_brand
@@ -120,6 +178,101 @@
         (#{name}, #{desc}, #{picUrl}, #{floorPrice}, #{addTime}, #{updateTime})
     </insert>
 
+    <insert id="createCategory">
+        insert into cskaoyan_mall_category
+        (`name`, keywords, `desc`, pid, icon_url, pic_url, `level`, add_time, update_time)
+        values
+        (#{name}, #{keywords}, #{desc}, #{pid}, #{iconUrl}, #{picUrl}, #{level}, #{addTime}, #{updateTime})
+    </insert>
+
+    <update id="updateCategory">
+        update cskaoyan_mall_category set
+        `name` = #{name},
+        keywords = #{keywords},
+        `desc` = #{desc},
+        pid = #{pid},
+        icon_url = #{iconUrl},
+        pic_url = #{picUrl},
+        `level` = #{level},
+        sort_order = #{sortOrder},
+        update_time = #{updateTime},
+        deleted = #{deleted}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <update id="deleteCategory">
+        update cskaoyan_mall_category set
+        deleted = #{deleted}
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+    <sql id="Order_Query_Judge">
+        <if test="(order.userId != null and order.userId != '') ||
+        (order.orderSn != null and order.orderSn != '') ||
+        (orderStatusArray != null and orderStatusArray.length>0)">
+            <where>
+                deleted = 0
+                <if test="order.userId != null and order.userId != ''">
+                    and user_id = #{order.userId}
+                </if>
+                <if test="order.orderSn != null and order.orderSn != ''">
+                    and order_sn = #{order.orderSn}
+                </if>
+                <if test="orderStatusArray != null and orderStatusArray.length>0">
+                    and
+                    <foreach collection="orderStatusArray" open="(" close=")" item="orderStatus" separator="or">
+                        order_status = #{orderStatus}
+                    </foreach>
+                </if>
+            </where>
+        </if>
+    </sql>
+
+    <select id="queryOrder" resultType="com.xjtuse.mall.bean.mall.Order" resultMap="OrderResultMap">
+        select
+        <include refid="Base_Order_List"/>
+        from cskaoyan_mall_order
+        -- 进行条件查询
+        <include refid="Order_Query_Judge"/>
+        <if test="pageUtil.page != null">
+            order by #{pageUtil.sort} #{pageUtil.order}
+            limit #{pageUtil.start}, #{pageUtil.limit}
+        </if>
+    </select>
+
+    <select id="queryOrderCount" resultType="int">
+        select count(*)
+        from cskaoyan_mall_order
+        <include refid="Order_Query_Judge"/>
+    </select>
+
+    <select id="queryOrderById" resultMap="OrderResultMap">
+        select
+        <include refid="Base_Order_List"/>
+        from cskaoyan_mall_order
+        where id = #{id};
+    </select>
+
+    <sql id="Order_Goods_List">
+        id, order_id, goods_id, goods_name, goods_sn, product_id, `number`, price, specifications, pic_url, comment, add_time, update_time, deleted
+    </sql>
+
+    <select id="queryOAGByOrderId" resultMap="OrderAndGoodsMap">
+        select
+         <include refid="Order_Goods_List"/>
+         from cskaoyan_mall_order_goods
+         where order_id = #{id}
+    </select>
+
+    <select id="queryUserById" resultType="com.xjtuse.mall.bean.user.User">
+        select id, username, password, gender, birthday, last_login_time, last_login_ip, user_level, nickname, mobile, avatar, weixin_openid, status, add_time, update_time, deleted
+        from cskaoyan_mall_user
+        where id = #{userId}
+    </select>
 
 </mapper>
 

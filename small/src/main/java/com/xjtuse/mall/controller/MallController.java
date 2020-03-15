@@ -1,13 +1,17 @@
 package com.xjtuse.mall.controller;
 
 import com.xjtuse.mall.bean.mall.Brand;
-import com.xjtuse.mall.result.ResultVo;
-import com.xjtuse.mall.result.TResultVo;
+import com.xjtuse.mall.bean.mall.Category;
+import com.xjtuse.mall.bean.mall.Order;
+import com.xjtuse.mall.result.*;
 import com.xjtuse.mall.service.MallService;
 import com.xjtuse.mall.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Arrays;
+import java.util.Map;
 
 /**
  * @author 失了秩
@@ -66,5 +70,28 @@ public class MallController {
     @RequestMapping("/brand/create")
     public TResultVo createBrand(@RequestBody Brand brand){
         return mallService.createBrand(brand);
+    }
+
+    //上传类目
+    @RequestMapping("/category/create")
+    public TResultVo createCategory(@RequestBody Category category){ return mallService.createCategory(category); }
+
+    //更新类目
+    @RequestMapping("/category/update")
+    public TResultVo updateCategory(@RequestBody Category category){ return mallService.updateCategory(category); }
+
+    //删除类目
+    @RequestMapping("/category/delete")
+    public TResultVo deleteCategory(@RequestBody Category category){ return mallService.deleteCategory(category); }
+
+    //查询订单
+    @RequestMapping("/order/list")
+    public MapResultVo queryOrder(PageUtil pageUtil, Order order, int[] orderStatusArray){
+        return mallService.queryOrder(pageUtil, order, orderStatusArray);
+    }
+
+    @RequestMapping("/order/detail")
+    public TResultVo queryOrderDetailById(Order order){
+        return mallService.queryOrderById(order);
     }
 }

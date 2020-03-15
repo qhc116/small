@@ -1,14 +1,10 @@
 package com.xjtuse.mall.service.impl;
 
-import com.xjtuse.mall.bean.mall.Brand;
-import com.xjtuse.mall.bean.mall.Category;
-import com.xjtuse.mall.bean.mall.ParentCategory;
+import com.xjtuse.mall.bean.mall.*;
+import com.xjtuse.mall.bean.user.User;
 import com.xjtuse.mall.common.Constants;
 import com.xjtuse.mall.mapper.MallMapper;
-import com.xjtuse.mall.result.MapResultVo;
-import com.xjtuse.mall.result.ListResultVo;
-import com.xjtuse.mall.result.ResultVo;
-import com.xjtuse.mall.result.TResultVo;
+import com.xjtuse.mall.result.*;
 import com.xjtuse.mall.service.MallService;
 import com.xjtuse.mall.utils.MD5Util;
 import com.xjtuse.mall.utils.ResultUtil;
@@ -81,6 +77,7 @@ public class MallServiceImpl implements MallService {
 
     @Override
     public TResultVo deleteBrand(Brand brand) {
+        brand.setDeleted(true);
         mapper.deleteBrand(brand);
         return ResultUtil.genSuccessResult();
     }
@@ -114,5 +111,53 @@ public class MallServiceImpl implements MallService {
         brand.setAddTime(new Date());
         mapper.createBrand(brand);
         return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public TResultVo createCategory(Category category) {
+        mapper.createCategory(category);
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public TResultVo updateCategory(Category category) {
+        category.setUpdateTime(new Date());
+        mapper.updateCategory(category);
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public TResultVo deleteCategory(Category category) {
+        category.setDeleted(true);
+        mapper.deleteCategory(category);
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public MapResultVo queryOrder(PageUtil pageUtil, Order order, int[] orderStatusArray) {
+        if (pageUtil.getLimit() != null) {
+            pageUtil.initStart();
+        }
+        order.setDeleted(false);
+        Integer count = queryOrderCount(pageUtil, order, orderStatusArray);
+        List<Order> orders = mapper.queryOrder(pageUtil, order, orderStatusArray);
+        return ResultUtil.ok(orders, count);
+    }
+
+    @Override
+    public int queryOrderCount(PageUtil pageUtil, Order order, int[] orderStatusArray) {
+        return mapper.queryOrderCount(pageUtil, order, orderStatusArray);
+    }
+
+    @Override
+    public TResultVo queryOrderById(Order order) {
+        Map<String, Object> map = new HashMap<>();
+        Order realOrder = mapper.queryOrderById(order);
+        List<OrderAndGoods> orderAndGoods = mapper.queryOAGByOrderId(realOrder);
+        User user = mapper.queryUserById(realOrder);
+        map.put("user", user);
+        map.put("order", realOrder);
+        map.put("orderGoods", orderAndGoods);
+        return ResultUtil.genSuccessResult(map);
     }
 }

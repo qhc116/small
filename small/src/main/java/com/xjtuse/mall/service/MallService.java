@@ -1,13 +1,15 @@
 package com.xjtuse.mall.service;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import com.xjtuse.mall.bean.mall.Brand;
-import com.xjtuse.mall.result.MapResultVo;
-import com.xjtuse.mall.result.ListResultVo;
-import com.xjtuse.mall.result.ResultVo;
-import com.xjtuse.mall.result.TResultVo;
+import com.xjtuse.mall.bean.mall.Category;
+import com.xjtuse.mall.bean.mall.Order;
+import com.xjtuse.mall.result.*;
 import com.xjtuse.mall.utils.PageUtil;
 import com.xjtuse.mall.utils.ResultUtil;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 /**
  * @author 失了秩
@@ -31,4 +33,16 @@ public interface MallService {
     TResultVo uploadBrandImg(MultipartFile multipartFile);
 
     TResultVo createBrand(Brand brand);
+
+    TResultVo createCategory(Category category);
+
+    TResultVo updateCategory(Category category);
+
+    TResultVo deleteCategory(Category category);
+
+    MapResultVo queryOrder(PageUtil pageUtil, Order order, int[] orderStatusArray);
+
+    int queryOrderCount(PageUtil pageUtil, Order order, int[] orderStatusArray);
+
+    TResultVo queryOrderById(Order order);
 }

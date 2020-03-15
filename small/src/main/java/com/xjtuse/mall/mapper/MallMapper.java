@@ -1,9 +1,7 @@
 package com.xjtuse.mall.mapper;
 
-import com.xjtuse.mall.bean.mall.Brand;
-import com.xjtuse.mall.bean.mall.Category;
-import com.xjtuse.mall.bean.mall.ParentCategory;
-import com.xjtuse.mall.bean.mall.Region;
+import com.xjtuse.mall.bean.mall.*;
+import com.xjtuse.mall.bean.user.User;
 import com.xjtuse.mall.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
 
@@ -28,4 +26,20 @@ public interface MallMapper {
     void deleteBrand(Brand brand);
 
     void createBrand(Brand brand);
+
+    void createCategory(Category category);
+
+    void updateCategory(Category category);
+
+    void deleteCategory(Category category);
+
+    List<Order> queryOrder(@Param("pageUtil") PageUtil pageUtil, @Param("order") Order order, @Param("orderStatusArray") int[] orderStatusArray);
+
+    int queryOrderCount(@Param("pageUtil") PageUtil pageUtil, @Param("order") Order order, @Param("orderStatusArray") int[] orderStatusArray);
+
+    Order queryOrderById(Order order);
+
+    List<OrderAndGoods> queryOAGByOrderId(Order order);
+
+    User queryUserById(Order order);
 }
