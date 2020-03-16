@@ -29,7 +29,6 @@ public class String2StringArray extends BaseTypeHandler<String[]> {
         }
         stringBuilder.deleteCharAt(stringBuilder.length()-1);
         stringBuilder.append("]");
-        System.out.println(stringBuilder);
         preparedStatement.setString(i, stringBuilder.toString());
     }
 

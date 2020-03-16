@@ -1,5 +1,8 @@
 package com.xjtuse.mall.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.xjtuse.mall.bean.goods.*;
 import com.xjtuse.mall.bean.mall.Brand;
 import com.xjtuse.mall.mapper.GoodsMapper;
@@ -11,7 +14,9 @@ import com.xjtuse.mall.service.GoodsService;
 import com.xjtuse.mall.service.MallService;
 import com.xjtuse.mall.utils.ResultUtil;
 import com.xjtuse.mall.utils.PageUtil;
+import com.xjtuse.mall.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -72,5 +77,98 @@ public class GoodsServiceImpl implements GoodsService {
         map.put("brandList", brandList);
         map.put("categoryList", categoryList);
         return ResultUtil.catAndBrandOk(map);
+    }
+
+    @Override
+    public ResultVo updateGoods(GoodsData data) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[");
+        for (String s1 : data.getGoods().getGallery()) {
+            stringBuilder.append(s1);
+            stringBuilder.append(",");
+        }
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        stringBuilder.append("]");
+        mapper.updateGoods(data.getGoods(), stringBuilder.toString());
+        mapper.setAttributeDeleted(data.getGoods().getId());
+        for (GoodsAttribute attribute : data.getAttributes()) {
+            if (attribute.getId() == null) {
+                mapper.insertAttribute(attribute, data.getGoods().getId());
+            } else {
+                mapper.updateAttribute(attribute);
+            }
+        }
+
+        mapper.setProductDeleted(data.getGoods().getId());
+        List<GoodsProduct> products = data.getProducts();
+        for (GoodsProduct product : products) {
+            if (product.getGoodsId() == null) {
+                mapper.insertProduct(product, data.getGoods().getId(), JSON.toJSONString(product.getSpecifications()));
+            } else {
+                mapper.updateProducts(product, JSON.toJSONString(product.getSpecifications()));
+            }
+        }
+
+        mapper.setSpecificationsDeleted(data.getGoods().getId());
+        List<GoodsSpecification> specifications = data.getSpecifications();
+        for (GoodsSpecification specification : specifications) {
+            if (specification.getGoodsId() == null) {
+                mapper.insertSpecification(specification, data.getGoods().getId());
+            } else {
+                mapper.updateSpecification(specification);
+            }
+        }
+        PageUtil pageUtil = new PageUtil();
+        pageUtil.setPage(1);
+        pageUtil.setLimit(20);
+        pageUtil.setOrder("desc");
+        pageUtil.setSort("add_time");
+        pageUtil.initStart();
+        return this.queryGoods(pageUtil, null);
+    }
+
+    @Override
+    public ResultVo goodsDelete(Goods goods) {
+        mapper.setGoodsDeleted(goods.getId());
+        mapper.setAttributeDeleted(goods.getId());
+        mapper.setProductDeleted(goods.getId());
+        mapper.setSpecificationsDeleted(goods.getId());
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public ResultVo goodsCreate(GoodsData data) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("[");
+        for (String s1 : data.getGoods().getGallery()) {
+            stringBuilder.append("\"");
+            stringBuilder.append(s1);
+            stringBuilder.append("\",");
+        }
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        stringBuilder.append("]");
+        Goods goods = data.getGoods();
+        goods.setGoodsSn(UUIDUtils.getUUID());
+        mapper.insertGoods(data.getGoods(), stringBuilder.toString());
+        Integer id = mapper.queryMaxId() + 1;
+
+        for (GoodsAttribute attribute : data.getAttributes()) {
+            mapper.insertAttribute(attribute, id);
+        }
+
+        for (GoodsSpecification specification : data.getSpecifications()) {
+            mapper.insertSpecification(specification, id);
+        }
+
+        for (GoodsProduct product : data.getProducts()) {
+            mapper.insertProduct(product, id, stringBuilder.toString());
+        }
+        PageUtil pageUtil = new PageUtil();
+        pageUtil.setPage(1);
+        pageUtil.setLimit(20);
+        pageUtil.setOrder("desc");
+        pageUtil.setSort("add_time");
+        pageUtil.initStart();
+        return this.queryGoods(pageUtil, null);
     }
 }

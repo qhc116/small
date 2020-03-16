@@ -27,6 +27,7 @@
         <result column="deleted" property="deleted" jdbcType="BIT"/>
         <result column="detail" property="detail" jdbcType="LONGVARCHAR"/>
     </resultMap>
+
     <sql id="Base_Column_List">
         id, goods_sn, `name`, category_id, brand_id, gallery, keywords, brief, is_on_sale,
         sort_order, pic_url, share_url, is_new, is_hot, unit, counter_price, retail_price,
@@ -38,11 +39,14 @@
         <include refid="Base_Column_List"/>
         from cskaoyan_mall_goods
         <where>
-            <if test="goods.goodsSn != null">
-                goods_sn like concat('%',concat(#{goods.goodsSn},'%'))
-            </if>
-            <if test="goods.name != null">
-                and `name` like concat('%',concat(#{goods.name},'%'))
+            deleted = 0
+            <if test="goods != null">
+                <if test="goods.goodsSn != null">
+                    and goods_sn like concat('%',concat(#{goods.goodsSn},'%'))
+                </if>
+                <if test="goods.name != null">
+                    and `name` like concat('%',concat(#{goods.name},'%'))
+                </if>
             </if>
         </where>
         order by #{pageUtil.sort} #{pageUtil.order} limit #{pageUtil.start},#{pageUtil.limit}
@@ -51,14 +55,33 @@
     <select id="queryGoodsCount" resultType="Integer">
         select count(*) from cskaoyan_mall_goods
         <where>
-            <if test="goods.goodsSn != null">
-                goods_sn like concat('%',concat(#{goods.goodsSn},'%'))
-            </if>
-            <if test="goods.name != null">
-                and `name` like concat('%',concat(#{goods.name},'%' ))
-            </if>
+            deleted = 0
 
+            <if test="goods != null">
+                <if test="goods.goodsSn != null">
+                    goods_sn like concat('%',concat(#{goods.goodsSn},'%'))
+                </if>
+                <if test="goods.name != null">
+                    and `name` like concat('%',concat(#{goods.name},'%' ))
+                </if>
+            </if>
         </where>
+    </select>
+
+    <insert id="insertGoods">
+        insert into cskaoyan_mall_goods
+        (goods_sn, `name`, category_id, brand_id, gallery, keywords, brief, is_on_sale,
+        sort_order, pic_url, share_url, is_new, is_hot, unit, counter_price, retail_price,
+        add_time, deleted, detail)
+        value
+        (#{goods.goodsSn},#{goods.name},#{goods.categoryId},#{goods.brandId},
+        #{gallery},#{goods.keywords},#{goods.brief},#{goods.isOnSale},#{goods.sortOrder},
+        #{goods.picUrl},#{goods.shareUrl},#{goods.isNew},#{goods.isHot},#{goods.unit},
+        #{goods.counterPrice},#{goods.retailPrice},now(),false,#{goods.detail})
+    </insert>
+
+    <select id="queryMaxId" resultType="Integer">
+        select max(id) from cskaoyan_mall_goods
     </select>
 
     <select id="queryGoodsById" resultMap="BaseResultMap">
@@ -71,7 +94,56 @@
         </where>
     </select>
 
-    <resultMap id="GoodsAttributeMap" type="com.xjtuse.mall.bean.goods.GoodsAttribute">
+    <update id="updateGoods">
+        update cskaoyan_mall_goods
+        <set>
+            goods_sn = #{goods.goodsSn},
+
+            name = #{goods.name},
+
+            category_id = #{goods.categoryId},
+
+            brand_id = #{goods.brandId},
+
+            gallery = #{gallery},
+
+            keywords = #{goods.keywords},
+
+            brief = #{goods.brief},
+
+            is_on_sale = #{goods.isOnSale},
+
+            sort_order = #{goods.sortOrder},
+
+            pic_url = #{goods.picUrl},
+
+            share_url = #{goods.shareUrl},
+
+            is_new = #{goods.isNew},
+
+            is_hot = #{goods.isHot},
+
+            unit = #{goods.unit},
+
+            counter_price = #{goods.counterPrice},
+
+            retail_price = #{goods.retailPrice},
+
+            update_time = now(),
+
+            detail = #{goods.detail},
+
+        </set>
+        where id = #{goods.id} and deleted = 0
+    </update>
+
+    <update id="setGoodsDeleted">
+        update cskaoyan_mall_goods
+        set deleted = true
+        where  id = #{id}
+    </update>
+
+    <resultMap id="GoodsAttributeMap" type="com.xjtuse.mall.bean.goods.Goods">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="goods_id" property="goodsId" jdbcType="INTEGER"/>
         <result column="attribute" property="attribute" jdbcType="VARCHAR"/>
@@ -93,6 +165,31 @@
             and goods_id = #{goods.id}
         </where>
     </select>
+
+    <update id="updateAttribute">
+        update cskaoyan_mall_goods_attribute
+        <set>
+            attribute = #{attribute.attribute},
+
+            `value` = #{attribute.value},
+
+            update_time = now(),
+
+            deleted = 0,
+        </set>
+        where id = #{attribute.id}
+    </update>
+
+    <update id="insertAttribute">
+        insert into cskaoyan_mall_goods_attribute
+        (attribute, goods_id, `value`, add_time, deleted)
+        value
+        (#{attribute.attribute}, #{goodsId}, #{attribute.value}, now(), false )
+    </update>
+
+    <update id="setAttributeDeleted">
+        update cskaoyan_mall_goods_attribute set deleted = true where goods_id = #{goodsId}
+    </update>
 
     <resultMap id="GoodsCatAndBrandMap" type="com.xjtuse.mall.bean.goods.GoodsCatAndBrand">
         <id column="id" property="value" jdbcType="INTEGER"/>
@@ -131,7 +228,8 @@
     <resultMap id="GoodsProducttMap" type="com.xjtuse.mall.bean.goods.GoodsProduct">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="goods_id" property="goodsId" jdbcType="INTEGER"/>
-        <result column="specifications" property="specifications" typeHandler="com.xjtuse.mall.datahandler.String2StringArray"/>
+        <result column="specifications" property="specifications"
+                typeHandler="com.xjtuse.mall.datahandler.String2StringArray"/>
         <result column="price" property="price" jdbcType="DECIMAL"/>
         <result column="number" property="number" jdbcType="INTEGER"/>
         <result column="url" property="url" jdbcType="VARCHAR"/>
@@ -151,6 +249,37 @@
         and goods_id = #{goods.id}
     </select>
 
+    <update id="setProductDeleted">
+        update cskaoyan_mall_goods_product set deleted = true where goods_id = #{goodsId}
+    </update>
+
+    <update id="updateProducts">
+        update cskaoyan_mall_goods_product
+        <set>
+            goods_id = #{product.goodsId},
+
+            specifications = #{specifications},
+
+            price = #{product.price},
+
+            number = #{product.number},
+
+            url = #{product.url},
+
+            update_time = now(),
+
+            deleted = false
+        </set>
+        where id = #{product.id}
+    </update>
+
+    <insert id="insertProduct">
+        insert into cskaoyan_mall_goods_product
+        (goods_id, specifications, price, `number`, url, add_time, deleted)
+        values
+        (#{goodsId}, #{specifications}, #{product.price}, #{product.number}, #{product.url}, now(), false)
+    </insert>
+
     <resultMap id="GoodsSpecificationMap" type="com.xjtuse.mall.bean.goods.GoodsSpecification">
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="goods_id" property="goodsId" jdbcType="INTEGER"/>
@@ -165,11 +294,42 @@
     </sql>
 
     <select id="queryGoodsSpecificationsById" resultMap="GoodsSpecificationMap">
-        select <include refid="Goods_Specification_List"/>
+        select
+        <include refid="Goods_Specification_List"/>
         from cskaoyan_mall_goods_specification
         where deleted = 0
         and goods_id = #{goods.id}
     </select>
+
+    <update id="setSpecificationsDeleted">
+        update cskaoyan_mall_goods_specification
+        set deleted = true
+        where goods_id = #{goodsId}
+    </update>
+
+    <update id="updateSpecification">
+        update cskaoyan_mall_goods_specification
+        <set>
+            specification = #{specification.specification},
+
+            `value` = #{specification.value},
+
+            pic_url = #{specification.picUrl},
+
+            update_time = now(),
+
+            deleted = false ,
+        </set>
+        where goods_id = #{specification.goodsId}
+    </update>
+
+    <insert id="insertSpecification">
+        insert into cskaoyan_mall_goods_specification
+        (goods_id, specification, `value`, pic_url,  update_time)
+        values
+        (#{goodsId}, #{specification.specification}, #{specification.value}, #{specification.picUrl}, now())
+    </insert>
+
 </mapper>
 
 
