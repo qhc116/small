@@ -1,6 +1,7 @@
 package com.xjtuse.mall.service;
 
 import com.xjtuse.mall.bean.goods.Goods;
+import com.xjtuse.mall.bean.goods.GoodsData;
 import com.xjtuse.mall.result.MapResultVo;
 import com.xjtuse.mall.result.ResultVo;
 import com.xjtuse.mall.utils.PageUtil;
@@ -17,4 +18,10 @@ public interface GoodsService {
     ResultVo queryDetail(Goods goods);
 
     ResultVo queryCatAndBrand();
+
+    ResultVo updateGoods(GoodsData data);
+
+    ResultVo goodsDelete(Goods goods);
+
+    ResultVo goodsCreate(GoodsData data);
 }
