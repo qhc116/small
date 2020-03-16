@@ -1,5 +1,6 @@
 package com.xjtuse.mall.service;
 
+import com.xjtuse.mall.bean.goods.Comment;
 import com.xjtuse.mall.bean.goods.Goods;
 import com.xjtuse.mall.bean.goods.GoodsData;
 import com.xjtuse.mall.result.MapResultVo;
@@ -24,4 +25,8 @@ public interface GoodsService {
     ResultVo goodsDelete(Goods goods);
 
     ResultVo goodsCreate(GoodsData data);
+
+    ResultVo commentList(PageUtil pageUtil, Comment comment);
+
+    ResultVo commentDelet(Comment comment);
 }

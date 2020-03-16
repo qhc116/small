@@ -48,4 +48,10 @@ public interface GoodsMapper {
     Integer insertGoods(@Param("goods") Goods goods, @Param("gallery") String gallery);
 
     Integer queryMaxId();
+
+    List<Comment> queryCommentList(@Param("pageUtil") PageUtil pageUtil,@Param("comment") Comment comment);
+
+    int queryCommentTotal(@Param("comment") Comment comment);
+
+    void setCommentDeleted(@Param("comment") Comment comment);
 }

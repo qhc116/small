@@ -6,6 +6,7 @@ import com.xjtuse.mall.result.MapResultVo;
 import com.xjtuse.mall.result.ResultVo;
 import com.xjtuse.mall.service.GoodsService;
 import com.xjtuse.mall.utils.PageUtil;
+import com.xjtuse.mall.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -57,6 +58,19 @@ public class GoodsController {
         return goodsService.goodsCreate(data);
     }
 
+    @RequestMapping("/comment/list")
+    public ResultVo commentList(PageUtil pageUtil, Comment comment){
+        return goodsService.commentList(pageUtil, comment);
+    }
 
+    @RequestMapping("/order/reply")
+    public ResultVo orderReply() {
+        return ResultUtil.genSuccessResult();
+    }
+
+    @RequestMapping("/comment/delete")
+    public ResultVo commentDelet(@RequestBody Comment comment) {
+        return goodsService.commentDelet(comment);
+    }
 
 }
