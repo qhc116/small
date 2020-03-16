@@ -1,5 +1,6 @@
 package com.xjtuse.mall.mapper;
 
+import com.xjtuse.mall.bean.goods.Goods;
 import com.xjtuse.mall.bean.promotion.*;
 import com.xjtuse.mall.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
@@ -48,4 +49,15 @@ public interface PromotionMapper {
     void deleteGroupon(Groupon groupon);
 
     void createGroupon(Groupon groupon);
+
+    List<GrouponRules> queryGrouponRules(@Param("pageUtil") PageUtil pageUtil, @Param("rules") GrouponRules rules);
+    int queryGrouponRulesCount(@Param("pageUtil") PageUtil pageUtil, @Param("rules") GrouponRules rules);
+
+    void updateGrouponRules(GrouponRules rules);
+
+    void deleteGrouponRules(GrouponRules rules);
+
+    void createGrouponRules(GrouponRules rules);
+    Goods queryGoodsById(GrouponRules rules);
+
 }
