@@ -222,4 +222,16 @@ public class MallServiceImpl implements MallService {
         mapper.deleteKeyword(keyword);
         return ResultUtil.genSuccessResult();
     }
+
+    @Override
+    public TResultVo createKeyword(Keyword keyword) {
+        Date date = new Date();
+        keyword.setAddTime(date);
+        keyword.setUpdateTime(date);
+        keyword.setDeleted(false);
+        mapper.createKeyword(keyword);
+        return ResultUtil.genSuccessResult();
+    }
+
+
 }

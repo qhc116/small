@@ -126,7 +126,7 @@ public class MallController {
     }
 
     //更新关键字
-    //接收的isHot和isDefault参数始终是错的
+    //注意使用isXXX的变量名 生成的getter setter会被简化成XXX
     @RequestMapping("/keyword/update")
     public TResultVo updateKeyword(@RequestBody Keyword keyword){
         return mallService.updateKeyword(keyword);
@@ -136,5 +136,11 @@ public class MallController {
     @RequestMapping("/keyword/delete")
     public TResultVo deleteKeyword(@RequestBody Keyword keyword){
         return mallService.deleteKeyword(keyword);
+    }
+
+    //添加关键字
+    @RequestMapping("/keyword/create")
+    public TResultVo createKeyword(@RequestBody Keyword keyword){
+        return mallService.createKeyword(keyword);
     }
 }

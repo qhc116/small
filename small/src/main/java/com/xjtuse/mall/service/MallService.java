@@ -58,4 +58,6 @@ public interface MallService {
     TResultVo updateKeyword(Keyword keyword);
 
     TResultVo deleteKeyword(Keyword keyword);
+
+    TResultVo createKeyword(Keyword keyword);
 }

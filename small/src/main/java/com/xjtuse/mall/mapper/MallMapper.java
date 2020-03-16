@@ -1,6 +1,7 @@
 package com.xjtuse.mall.mapper;
 
 import com.xjtuse.mall.bean.mall.*;
+import com.xjtuse.mall.bean.promotion.Topic;
 import com.xjtuse.mall.bean.user.User;
 import com.xjtuse.mall.utils.PageUtil;
 import org.apache.ibatis.annotations.Param;
@@ -58,4 +59,6 @@ public interface MallMapper {
     void updateKeyword(Keyword keyword);
 
     void deleteKeyword(Keyword keyword);
+
+    void createKeyword(Keyword keyword);
 }

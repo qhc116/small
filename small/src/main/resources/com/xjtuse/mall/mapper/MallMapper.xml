@@ -362,9 +362,12 @@
         <include refid="Base_Keyword_List"/>
         from cskaoyan_mall_keyword
         where deleted = 0
-<!--        <if test="issue.question != null and issue.question != ''">-->
-<!--            and question like concat('%',concat(#{issue.question},'%'))-->
-<!--        </if>-->
+        <if test="keyword.keyword != null and keyword.keyword != ''">
+            and keyword like concat('%',concat(#{keyword.keyword},'%'))
+        </if>
+        <if test="keyword.url != null and keyword.url != ''">
+            and url like concat('%',concat(#{keyword.url},'%'))
+        </if>
         <if test="pageUtil.page != null">
             order by #{pageUtil.sort} #{pageUtil.order}
             limit #{pageUtil.start}, #{pageUtil.limit}
@@ -375,6 +378,12 @@
         select count(*)
         from cskaoyan_mall_keyword
         where deleted = 0
+        <if test="keyword.keyword != null and keyword.keyword != ''">
+            and keyword like concat('%',concat(#{keyword.keyword},'%'))
+        </if>
+        <if test="keyword.url != null and keyword.url != ''">
+            and url like concat('%',concat(#{keyword.url},'%'))
+        </if>
     </select>
 
     <update id="updateKeyword">
@@ -397,6 +406,13 @@
         deleted = #{deleted}
         where id = #{id}
     </update>
+
+    <insert id="createKeyword">
+        insert into cskaoyan_mall_keyword
+        (keyword, url, is_hot, is_default, add_time, update_time, deleted)
+        values
+        (#{keyword}, #{url}, #{isHot}, #{isDefault}, #{addTime}, #{updateTime}, #{deleted})
+    </insert>
 
 </mapper>
 
