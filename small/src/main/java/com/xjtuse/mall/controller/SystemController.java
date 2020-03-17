@@ -1,10 +1,15 @@
 package com.xjtuse.mall.controller;
 
+import com.xjtuse.mall.bean.system.Admin;
+import com.xjtuse.mall.bean.system.Role;
 import com.xjtuse.mall.result.ResultVo;
 import com.xjtuse.mall.service.SystemService;
 import com.xjtuse.mall.utils.FileUploadUtil;
+import com.xjtuse.mall.utils.PageUtil;
+import com.xjtuse.mall.utils.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,4 +60,34 @@ public class SystemController {
             e.printStackTrace();
         }
     }
+
+    @RequestMapping("/admin/list")
+    public ResultVo adminList(PageUtil pageUtil, String username) {
+        return service.adminList(pageUtil, username);
+    }
+    @RequestMapping("/role/options")
+    public ResultVo roleOptions() {
+        return service.roleOptions();
+    }
+
+    @RequestMapping("/admin/update")
+    public ResultVo adminUpdate(@RequestBody Admin admin) {
+        return service.adminUpdate(admin);
+    }
+
+    @RequestMapping("/role/list")
+    public ResultVo adminRole(PageUtil pageUtil, Role role) {
+        return service.adminRole(pageUtil, role);
+    }
+
+    @RequestMapping("/role/update")
+    public ResultVo roleUpdate(@RequestBody Role role) {
+        return service.roleUpdate(role);
+    }
+
+    @RequestMapping("/role/delete")
+    public ResultVo roleDelete(@RequestBody Role role) {
+        return service.roleDelete(role);
+    }
+
 }
