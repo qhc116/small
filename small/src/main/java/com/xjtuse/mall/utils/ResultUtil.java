@@ -1,6 +1,5 @@
 package com.xjtuse.mall.utils;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.xjtuse.mall.bean.system.Storage;
 import com.xjtuse.mall.result.*;
 import org.springframework.lang.Nullable;
@@ -77,4 +76,12 @@ public class ResultUtil {
         return resultVo;
     }
 
+    public static TResultVo genFailResult(@Nullable String errmsg){
+        TResultVo resultVo = new TResultVo<>();
+        resultVo.setErrmsg("失败，请联系管理员！！！");
+        if (errmsg != null) {
+            resultVo.setErrmsg(errmsg);
+        }
+        return resultVo;
+    }
 }

@@ -1,17 +1,23 @@
 package com.xjtuse.mall.service.impl;
 
+import com.xjtuse.mall.bean.goods.Goods;
 import com.xjtuse.mall.bean.promotion.*;
+import com.xjtuse.mall.customException.CustomException;
 import com.xjtuse.mall.mapper.PromotionMapper;
 import com.xjtuse.mall.result.MapResultVo;
+import com.xjtuse.mall.result.ResultVo;
 import com.xjtuse.mall.result.TResultVo;
 import com.xjtuse.mall.service.PromotionService;
 import com.xjtuse.mall.utils.PageUtil;
 import com.xjtuse.mall.utils.ResultUtil;
+import org.apache.logging.log4j.message.ReusableMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PromotionServiceImpl implements PromotionService {
@@ -135,13 +141,56 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public MapResultVo queryGroupon(PageUtil pageUtil, Groupon groupon) {
+    public TResultVo queryGroupon(PageUtil pageUtil, Groupon groupon) {
         if (pageUtil.getLimit() != null) {
             pageUtil.initStart();
         }
         List<Groupon> groupons = mapper.queryGroupon(pageUtil, groupon);
         int count = mapper.queryGrouponCount(pageUtil, groupon);
-        return ResultUtil.ok(groupons, count);
+        return null;
+    }
+
+    @Override
+    public MapResultVo queryGrouponRules(PageUtil pageUtil, GrouponRules rules) {
+        if (pageUtil.getLimit() != null) {
+            pageUtil.initStart();
+        }
+        List<GrouponRules> grouponRules = mapper.queryGrouponRules(pageUtil, rules);
+        int count = mapper.queryGrouponRulesCount(pageUtil, rules);
+        return ResultUtil.ok(grouponRules, count);
+    }
+
+    @Override
+    public TResultVo updateGrouponRules(GrouponRules rules) {
+        rules.setUpdateTime(new Date());
+        mapper.updateGrouponRules(rules);
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public TResultVo deleteGrouponRules(GrouponRules rules) {
+        rules.setDeleted(true);
+        rules.setUpdateTime(new Date());
+        mapper.deleteGrouponRules(rules);
+        return ResultUtil.genSuccessResult();
+    }
+
+    @Override
+    public TResultVo createGrouponRules(GrouponRules rules) throws CustomException {
+        Goods goods = mapper.queryGoodsById(rules);
+        //商品可能不存在
+        if(goods == null || goods.getName() == null){
+            throw new CustomException("该商品不存在！");
+        }
+        Date date = new Date();
+        rules.setAddTime(date);
+        rules.setUpdateTime(date);
+        rules.setDeleted(false);
+        //设置商品名称,图片路径
+        rules.setGoodsName(goods.getName());
+        rules.setPicUrl(goods.getPicUrl());
+        mapper.createGrouponRules(rules);
+        return ResultUtil.genSuccessResult();
     }
 
 

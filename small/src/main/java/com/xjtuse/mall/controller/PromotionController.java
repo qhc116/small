@@ -3,6 +3,7 @@ package com.xjtuse.mall.controller;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.xjtuse.mall.bean.promotion.*;
 import com.xjtuse.mall.common.CustomJsonDateDeserializer;
+import com.xjtuse.mall.customException.CustomException;
 import com.xjtuse.mall.result.MapResultVo;
 import com.xjtuse.mall.result.TResultVo;
 import com.xjtuse.mall.service.PromotionService;
@@ -93,5 +94,29 @@ public class PromotionController {
 
     //查询团购
     @RequestMapping("/groupon/listRecord")
-    public MapResultVo queryGroupon(PageUtil pageUtil, Groupon groupon){ return service.queryGroupon(pageUtil, groupon); }
+    public TResultVo queryGroupon(PageUtil pageUtil, Groupon groupon){ return service.queryGroupon(pageUtil, groupon); }
+
+    //查询团购规则
+    @RequestMapping("/groupon/list")
+    public MapResultVo queryGrouponRules(PageUtil pageUtil, GrouponRules rules){
+        return service.queryGrouponRules(pageUtil, rules);
+    }
+
+    //团购规则更新
+    @RequestMapping("/groupon/update")
+    public TResultVo updateGrouponRules(@RequestBody GrouponRules rules){
+        return service.updateGrouponRules(rules);
+    }
+
+    //团购规则删除
+    @RequestMapping("/groupon/delete")
+    public TResultVo deletedGrouponRules(@RequestBody GrouponRules rules){
+        return service.deleteGrouponRules(rules);
+    }
+
+    //团购规则添加
+    @RequestMapping("/groupon/create")
+    public TResultVo createGrouponRules(@RequestBody GrouponRules rules) throws CustomException {
+        return service.createGrouponRules(rules);
+    }
 }
