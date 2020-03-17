@@ -1,22 +1,17 @@
 package com.xjtuse.mall.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.xjtuse.mall.bean.goods.*;
-import com.xjtuse.mall.bean.mall.Brand;
 import com.xjtuse.mall.mapper.GoodsMapper;
 import com.xjtuse.mall.mapper.MallMapper;
 import com.xjtuse.mall.result.MapResultVo;
-import com.xjtuse.mall.result.ListResultVo;
 import com.xjtuse.mall.result.ResultVo;
+import com.xjtuse.mall.result.TResultVo;
 import com.xjtuse.mall.service.GoodsService;
-import com.xjtuse.mall.service.MallService;
 import com.xjtuse.mall.utils.ResultUtil;
 import com.xjtuse.mall.utils.PageUtil;
 import com.xjtuse.mall.utils.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jackson.JsonObjectDeserializer;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -170,5 +165,22 @@ public class GoodsServiceImpl implements GoodsService {
         pageUtil.setSort("add_time");
         pageUtil.initStart();
         return this.queryGoods(pageUtil, null);
+    }
+
+    @Override
+    public ResultVo commentList(PageUtil pageUtil, Comment comment) {
+        pageUtil.initStart();
+        List<Comment> comments = mapper.queryCommentList(pageUtil, comment);
+        int total = mapper.queryCommentTotal(comment);
+        Map map = new HashMap();
+        map.put("items", comments);
+        map.put("total", total);
+        return ResultUtil.genSuccessResult(map);
+    }
+
+    @Override
+    public ResultVo commentDelet(Comment comment) {
+        mapper.setCommentDeleted(comment);
+        return ResultUtil.genSuccessResult();
     }
 }
