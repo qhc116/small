@@ -41,14 +41,14 @@ public interface PromotionMapper {
 
     void createTopic(Topic topic);
 
-    List<Groupon> queryGroupon(@Param("pageUtil") PageUtil pageUtil, @Param("groupon") Groupon groupon);
+    List<Integer> queryGrouponIdDistinct(@Param("pageUtil") PageUtil pageUtil, @Param("groupon") Groupon groupon);
     int queryGrouponCount(@Param("pageUtil") PageUtil pageUtil, @Param("groupon") Groupon groupon);
 
-    void updateGroupon(Groupon groupon);
+    List<Groupon> queryGrouponByGid(Integer grouponId);
 
-    void deleteGroupon(Groupon groupon);
+    GrouponRules queryRelativeRules(Integer rulesId);
 
-    void createGroupon(Groupon groupon);
+    Integer queryRulesIdByGoodsId(GrouponRules rules);
 
     List<GrouponRules> queryGrouponRules(@Param("pageUtil") PageUtil pageUtil, @Param("rules") GrouponRules rules);
     int queryGrouponRulesCount(@Param("pageUtil") PageUtil pageUtil, @Param("rules") GrouponRules rules);

@@ -94,7 +94,7 @@ public class PromotionController {
 
     //查询团购
     @RequestMapping("/groupon/listRecord")
-    public TResultVo queryGroupon(PageUtil pageUtil, Groupon groupon){ return service.queryGroupon(pageUtil, groupon); }
+    public MapResultVo queryGroupon(PageUtil pageUtil, Groupon groupon, GrouponRules rules){ return service.queryGroupon(pageUtil, groupon, rules); }
 
     //查询团购规则
     @RequestMapping("/groupon/list")

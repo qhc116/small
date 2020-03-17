@@ -2,6 +2,7 @@ package com.xjtuse.mall.service.impl;
 
 import com.xjtuse.mall.bean.goods.Goods;
 import com.xjtuse.mall.bean.promotion.*;
+import com.xjtuse.mall.bean.user.User;
 import com.xjtuse.mall.customException.CustomException;
 import com.xjtuse.mall.mapper.PromotionMapper;
 import com.xjtuse.mall.result.MapResultVo;
@@ -14,10 +15,8 @@ import org.apache.logging.log4j.message.ReusableMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class PromotionServiceImpl implements PromotionService {
@@ -141,13 +140,35 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public TResultVo queryGroupon(PageUtil pageUtil, Groupon groupon) {
+    public MapResultVo queryGroupon(PageUtil pageUtil, Groupon groupon, GrouponRules rules) {
         if (pageUtil.getLimit() != null) {
             pageUtil.initStart();
         }
-        List<Groupon> groupons = mapper.queryGroupon(pageUtil, groupon);
+        if(rules.getGoodsId() != null){
+            //goodsId查找到rulesId
+            Integer rulesId = mapper.queryRulesIdByGoodsId(rules);
+            //利用rulesId进行groupon查找
+            groupon.setRulesId(rulesId);
+        }
+        List<Object> result = new ArrayList<>();
         int count = mapper.queryGrouponCount(pageUtil, groupon);
-        return null;
+        //查询所有grouponId
+        List<Integer> ids = mapper.queryGrouponIdDistinct(pageUtil, groupon);
+        for (Integer id :
+                ids) {
+            //将同一grouponId的条目组成subGroupons
+            List<Groupon> groupons = mapper.queryGrouponByGid(id);
+            //将条目中的第一个作为groupon
+            Groupon firstGroupon = groupons.get(0);
+            //查询对应rules添加作为rules
+            GrouponRules queryRules = mapper.queryRelativeRules(firstGroupon.getRulesId());
+            Map<String, Object> map = new HashMap<>();
+            map.put("groupon", firstGroupon);
+            map.put("subGroupons", groupons);
+            map.put("rules", queryRules);
+            result.add(map);
+        }
+        return ResultUtil.ok(result, count);
     }
 
     @Override

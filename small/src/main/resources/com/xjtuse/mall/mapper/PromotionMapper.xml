@@ -403,38 +403,48 @@
         id, order_id, groupon_id, rules_id, user_id, creator_user_id, add_time, update_time, share_url, payed, deleted
     </sql>
 
-    <select id="queryGroupon" resultMap="GrouponResultMap">
+    <select id="queryGrouponIdDistinct" resultType="int">
         select
-        <include refid="Base_Groupon_List"/>
+        distinct groupon_id
         from cskaoyan_mall_groupon
         where deleted = 0
-<!--        <if test="topic.title != null and topic.title != ''">-->
-<!--            and title like concat('%',concat(#{topic.title},'%'))-->
-<!--        </if>-->
-<!--        <if test="topic.subtitle != null and topic.subtitle != ''">-->
-<!--            and subtitle like concat('%',concat(#{topic.subtitle},'%'))-->
-<!--        </if>-->
+        <if test="groupon.rulesId != null">
+            and rules_id = #{groupon.rulesId}
+        </if>
         <if test="pageUtil.page != null">
-            order by #{pageUtil.sort} #{pageUtil.order}
             limit #{pageUtil.start}, #{pageUtil.limit}
         </if>
     </select>
 
     <select id="queryGrouponCount" resultType="int">
         select
-        count(*)
+        count(distinct groupon_id)
         from cskaoyan_mall_groupon
         where deleted = 0
-        <!--        <if test="topic.title != null and topic.title != ''">-->
-        <!--            and title like concat('%',concat(#{topic.title},'%'))-->
-        <!--        </if>-->
-        <!--        <if test="topic.subtitle != null and topic.subtitle != ''">-->
-        <!--            and subtitle like concat('%',concat(#{topic.subtitle},'%'))-->
-        <!--        </if>-->
+        <if test="groupon.rulesId != null">
+            and rules_id = #{groupon.rulesId}
+        </if>
         <if test="pageUtil.page != null">
-            order by #{pageUtil.sort} #{pageUtil.order}
             limit #{pageUtil.start}, #{pageUtil.limit}
         </if>
+    </select>
+
+    <select id="queryGrouponByGid" resultMap="GrouponResultMap">
+        select <include refid="Base_Groupon_List"/>
+        from cskaoyan_mall_groupon
+        where groupon_id = #{grouponId}
+    </select>
+
+    <select id="queryRelativeRules" resultMap="GrouponRulesResultMap">
+        select <include refid="Base_GrouponRules_List"/>
+        from cskaoyan_mall_groupon_rules
+        where id = #{rulesId}
+    </select>
+
+    <select id="queryRulesIdByGoodsId" resultType="int">
+        select id
+        from cskaoyan_mall_groupon_rules
+        where goods_id = #{goodsId};
     </select>
 
     <sql id="Base_GrouponRules_List">

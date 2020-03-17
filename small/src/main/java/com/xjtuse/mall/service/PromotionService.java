@@ -38,7 +38,7 @@ public interface PromotionService {
 
     TResultVo createTopic(Topic topic);
 
-    TResultVo queryGroupon(PageUtil pageUtil, Groupon groupon);
+    MapResultVo queryGroupon(PageUtil pageUtil, Groupon groupon, GrouponRules rules);
 
 
     MapResultVo queryGrouponRules(PageUtil pageUtil, GrouponRules rules);
