@@ -29,4 +29,20 @@ public interface SystemMapper {
     void updateRoleById(@Param("role") Role role);
 
     void setRoleDeleted(@Param("role") Role role);
+
+    String queryPasswordByUsername(@Param("username") String username);
+
+    void insertAdmin(@Param("admin") Admin admin);
+
+    void setAdminDeleted(@Param("admin") Admin admin);
+
+    List<Storage> queryStorages(@Param("pageUtil") PageUtil pageUtil,@Param("storage")  Storage storage);
+
+    int queryStoragesCount(@Param("storage") Storage storage);
+
+    void updateStorage(@Param("storage") Storage storage);
+
+    void setStorageDeleted(@Param("storage") Storage storage);
+
+    void insertRole(@Param("role") Role role);
 }

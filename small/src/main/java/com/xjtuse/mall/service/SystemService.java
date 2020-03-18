@@ -2,6 +2,7 @@ package com.xjtuse.mall.service;
 
 import com.xjtuse.mall.bean.system.Admin;
 import com.xjtuse.mall.bean.system.Role;
+import com.xjtuse.mall.bean.system.Storage;
 import com.xjtuse.mall.result.ResultVo;
 import com.xjtuse.mall.result.TResultVo;
 import com.xjtuse.mall.utils.PageUtil;
@@ -26,4 +27,16 @@ public interface SystemService {
     ResultVo roleUpdate(Role role);
 
     ResultVo roleDelete(Role role);
+
+    ResultVo adminInsert(Admin admin);
+
+    ResultVo adminDelete(Admin admin);
+
+    ResultVo storageList(PageUtil pageUtil, Storage storage);
+
+    ResultVo storageUpdate(Storage storage);
+
+    ResultVo storageDelete(Storage storage);
+
+    ResultVo roleCreate(Role role);
 }

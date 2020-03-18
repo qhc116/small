@@ -5,6 +5,9 @@ import com.xjtuse.mall.result.MapResultVo;
 import com.xjtuse.mall.result.ResultVo;
 import com.xjtuse.mall.service.UserService;
 import com.xjtuse.mall.utils.PageUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +19,8 @@ public class UserController {
 
     @RequestMapping("/user/list")
     public ResultVo userList(PageUtil pageUtil, User user) {
+        Subject subject = SecurityUtils.getSubject();
+        Session session = subject.getSession();
         return userService.queryAllUser(pageUtil, user);
     }
 

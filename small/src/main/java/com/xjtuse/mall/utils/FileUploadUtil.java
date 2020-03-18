@@ -20,12 +20,14 @@ import java.util.UUID;
 public class FileUploadUtil {
 
     public static Storage init(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        String fileType = originalFilename.substring(originalFilename.lastIndexOf("."));
         String uuid = UUIDUtils.getUUID();
         transfer(file, uuid);
         Storage storage = new Storage();
         storage.setName(file.getOriginalFilename());
         storage.setDeleted(false);
-        storage.setUrl("http://localhost:6001/admin/storage/fetch/" + uuid + ".png");
+        storage.setUrl("http://localhost:6001/admin/storage/fetch/" + uuid + fileType );
         storage.setSize((int) file.getSize());
         storage.setType(file.getContentType());
         storage.setKey(uuid);
@@ -34,8 +36,10 @@ public class FileUploadUtil {
 
     public static void transfer(MultipartFile file, String uuid) {
         try {
+            String originalFilename = file.getOriginalFilename();
+            String fileType = originalFilename.substring(originalFilename.lastIndexOf("."));
             File path =
-                    new File("small/src/main/resources/static/" + uuid + ".png" );
+                    new File("small/src/main/resources/static/" + uuid + fileType );
             if (!path.getParentFile().exists()) {
                 path.getParentFile().mkdirs();
             }
