@@ -90,10 +90,10 @@
         <include refid="Base_AddressColumn_List"/>
         from cskaoyan_mall_address
         <where>
-            <if test="address.userId != 0">
+            <if test="address.userId != null">
                 user_id like concat(concat('%',#{address.userId}),'%')
             </if>
-            <if test="address.name != null">
+            <if test="address.name != null and address.name != ''">
                 and `name` like concat(concat('%',#{address.name}),'%')
             </if>
         </where>
@@ -104,10 +104,10 @@
         select count(id)
         from cskaoyan_mall_address
         <where>
-            <if test="address.userId != 0">
+            <if test="address.userId != null">
                 user_id like concat(concat('%',#{address.userId}),'%')
             </if>
-            <if test="address.name != null">
+            <if test="address.name != null and address.name != ''">
                 and `name` like concat(concat('%',#{address.name}),'%')
             </if>
         </where>
@@ -220,7 +220,7 @@
             <if test="searchHistory.userId != null">
                 user_id like concat('%',concat(#{searchHistory.userId},'%'))
             </if>
-            <if test="searchHistory.keyword != null">
+            <if test="searchHistory.keyword != null and searchHistory.keyword != ''">
                 and keyword like concat('%',concat(#{searchHistory.keyword},'%'))
             </if>
         </where>
@@ -233,7 +233,7 @@
             <if test="searchHistory.userId != null">
                 user_id like concat('%',concat(#{searchHistory.userId},'%'))
             </if>
-            <if test="searchHistory.keyword != null">
+            <if test="searchHistory.keyword != null and searchHistory.keyword != ''">
                 and keyword like concat('%',concat(#{searchHistory.keyword},'%'))
             </if>
         </where>
@@ -264,7 +264,7 @@
         <include refid="Base_FeedBackColumn_List"/>
         from cskaoyan_mall_feedback
         <where>
-            <if test="feedback.username != null">
+            <if test="feedback.username != null and feedback.username != ''">
                 username like concat('%',concat(#{feedback.username},'%'))
             </if>
             <if test="feedback.id != null">
@@ -280,7 +280,7 @@
             <if test="feedback.username != null">
                 username like concat('%',concat(#{feedback.username},'%'))
             </if>
-            <if test="feedback.id != null">
+            <if test="feedback.id != null and feedback.username != ''">
                 and id like concat('%',concat(#{feedback.id},'%'))
             </if>
         </where>

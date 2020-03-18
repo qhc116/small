@@ -7,7 +7,7 @@ public class Address {
 
   private int id;
   private String name;
-  private int userId;
+  private Integer userId;
   private int provinceId;
   private int cityId;
   private int areaId;

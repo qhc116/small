@@ -29,10 +29,10 @@
         <where>
             deleted = false
             <if test="storage != null">
-                <if test="storage.key != null">
+                <if test="storage.key != null and storage.key != ''">
                     and `key` like concat('%',#{storage.key},'%')
                 </if>
-                <if test="storage.name != null">
+                <if test="storage.name != null and storage.name != ''">
                     and `name` like concat('%',#{storage.name},'%')
                 </if>
             </if>
@@ -46,10 +46,10 @@
         <where>
             deleted = false
             <if test="storage != null">
-                <if test="storage.key != null">
+                <if test="storage.key != null and storage.key != ''">
                     and `key` like concat('%',#{storage.key},'%')
                 </if>
-                <if test="storage.name != null">
+                <if test="storage.name != null and storage.name != ''">
                     and `name` like concat('%',#{storage.name},'%')
                 </if>
             </if>
@@ -97,7 +97,7 @@
         from cskaoyan_mall_admin
         <where>
             deleted = false
-            <if test="username != null">
+            <if test="username != null and username != ''">
                 and username like concat('%',concat(#{username},'%'))
             </if>
         </where>
@@ -118,7 +118,7 @@
         from cskaoyan_mall_admin
         <where>
             deleted = false
-            <if test="username != null">
+            <if test="username != null and username != ''">
                 and username like concat('%',concat(#{username},'%'))
             </if>
         </where>
@@ -206,7 +206,7 @@
         from cskaoyan_mall_role
         <where>
             deleted = false
-            <if test="role.name != null">
+            <if test="role.name != null and role.name != ''">
                 and `name` like concat('%',#{role.name},'%')
             </if>
         </where>
@@ -219,7 +219,7 @@
         from cskaoyan_mall_role
         <where>
             deleted = false
-            <if test="role.name != null">
+            <if test="role.name != null and role.name != ''">
                 and `name` like concat('%',#{role.name},'%')
             </if>
         </where>

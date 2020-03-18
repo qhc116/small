@@ -41,10 +41,10 @@
         <where>
             deleted = 0
             <if test="goods != null">
-                <if test="goods.goodsSn != null">
+                <if test="goods.goodsSn != null and goods.goodsSn != ''">
                     and goods_sn like concat('%',concat(#{goods.goodsSn},'%'))
                 </if>
-                <if test="goods.name != null">
+                <if test="goods.name != null and goods.name != ''">
                     and `name` like concat('%',concat(#{goods.name},'%'))
                 </if>
             </if>
@@ -57,10 +57,10 @@
         <where>
             deleted = 0
             <if test="goods != null">
-                <if test="goods.goodsSn != null">
+                <if test="goods.goodsSn != null and goods.goodsSn != ''">
                     and goods_sn like concat('%',concat(#{goods.goodsSn},'%'))
                 </if>
-                <if test="goods.name != null">
+                <if test="goods.name != null and goods.name != ''">
                     and `name` like concat('%',concat(#{goods.name},'%' ))
                 </if>
             </if>
