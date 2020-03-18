@@ -1,5 +1,14 @@
 package com.xjtuse.mall.controller;
 
+import com.xjtuse.mall.bean.system.Admin;
+import com.xjtuse.mall.result.ResultVo;
+import com.xjtuse.mall.utils.ResultUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,17 +20,23 @@ import java.util.Map;
 
 @RestController
 public class AuthController {
+
     @RequestMapping("/auth/login")
-    public Map login(@RequestBody HashMap data) {
-//        return "{\"errno\":0,\"data\":{\"adminInfo\":{\"nickName\":\"admin123\",\"avatar\":\"https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif\"},\"token\":\"45963731-edae-4dd2-a54c-fe70266165ad\"},\"errmsg\":\"成功\"}";
-        Map<String,Object> map = new HashMap<>();
-        String username = (String)data.get("username");
-        String password= (String)data.get("password");
-        map.put("errno",0);
-        map.put("errmsg","成功");
-        map.put("userTotal", 0);
-        map.put("total", 0);
-        return map;
+    public ResultVo login(@RequestBody Admin admin) {
+        String username = admin.getUsername();
+        String password= admin.getPassword();
+        if (username == null || password == null || password == "" || username == "") {
+            return ResultUtil.fail(1, "用户名或密码参数错误！");
+        }
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        try {
+            subject.login(token);
+        } catch (IncorrectCredentialsException e) {
+            return ResultUtil.fail(1, "用户名或密码错误！");
+        }
+        subject = SecurityUtils.getSubject();
+        return ResultUtil.genSuccessResult();
     }
 
     @RequestMapping("/auth/info")

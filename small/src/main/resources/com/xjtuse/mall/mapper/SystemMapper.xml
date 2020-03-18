@@ -13,8 +13,8 @@
         <result column="deleted" property="deleted" jdbcType="BIT"/>
     </resultMap>
     <sql id="Base_Column_List">
-    `key`, `name`, `type`, `size`, url, add_time, update_time, deleted
-  </sql>
+        `key`, `name`, `type`, `size`, url, add_time, update_time, deleted
+    </sql>
 
     <insert id="storageCreate">
         insert into cskaoyan_mall_storage
@@ -22,6 +22,61 @@
         values
         (#{storage.key},#{storage.name},#{storage.type},#{storage.size},#{storage.url},now(),null,#{storage.deleted})
     </insert>
+    
+    <select id="queryStorages" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from cskaoyan_mall_storage
+        <where>
+            deleted = false
+            <if test="storage != null">
+                <if test="storage.key != null">
+                    and `key` like concat('%',#{storage.key},'%')
+                </if>
+                <if test="storage.name != null">
+                    and `name` like concat('%',#{storage.name},'%')
+                </if>
+            </if>
+        </where>
+        order by #{pageUtil.sort} #{pageUtil.order}
+        limit #{pageUtil.start}, #{pageUtil.limit}
+    </select>
+
+    <select id="queryStoragesCount" resultType="Integer">
+        select count(*) from cskaoyan_mall_storage
+        <where>
+            deleted = false
+            <if test="storage != null">
+                <if test="storage.key != null">
+                    and `key` like concat('%',#{storage.key},'%')
+                </if>
+                <if test="storage.name != null">
+                    and `name` like concat('%',#{storage.name},'%')
+                </if>
+            </if>
+        </where>
+    </select>
+
+    <update id="updateStorage">
+        update cskaoyan_mall_storage
+        <set>
+            `name` = #{storage.name},
+            update_time = now(),
+        </set>
+        <where>
+            `key` = #{storage.key}
+        </where>
+    </update>
+
+    <update id="setStorageDeleted">
+        update cskaoyan_mall_storage
+        <set>
+            deleted = true,
+            update_time = now(),
+        </set>
+        <where>
+            `key` = #{storage.key}
+        </where>
+    </update>
 
 
     <resultMap id="BaseAdminMap" type="com.xjtuse.mall.bean.system.AdminRes">
@@ -69,6 +124,18 @@
         </where>
     </select>
 
+
+    <update id="setAdminDeleted">
+        update cskaoyan_mall_admin
+        <set>
+            deleted = true
+        </set>
+        <where>
+            id = #{admin.id}
+        </where>
+    </update>
+
+
     <update id="updateAdminById">
         update cskaoyan_mall_admin
         <set>
@@ -84,6 +151,9 @@
         </where>
     </update>
 
+    <select id="queryPasswordByUsername" resultType="String">
+        select password from cskaoyan_mall_admin where username = #{username}
+    </select>
 
     <resultMap id="BaseOptionMap" type="com.xjtuse.mall.bean.system.LabelValue">
         <id column="id" property="value" jdbcType="INTEGER"/>
@@ -92,6 +162,20 @@
     <sql id="Base_Option_List">
         id, `name`
     </sql>
+
+    <insert id="insertAdmin" parameterType="com.xjtuse.mall.bean.system.Admin" useGeneratedKeys="true" keyProperty="id">
+        insert into cskaoyan_mall_admin
+        (username, password, avatar, add_time, role_ids)
+        values
+        (#{admin.username},#{admin.password},#{admin.avatar},now(),
+        #{admin.roleIds,typeHandler=com.xjtuse.mall.datahandler.String2IntegerArray})
+    </insert>
+
+
+
+
+
+
     <select id="queryRoleOptions" resultMap="BaseOptionMap">
         select
         <include refid="Base_Option_List"/>
@@ -100,6 +184,9 @@
             deleted = 0
         </where>
     </select>
+
+
+
 
     <resultMap id="BaseRoleMap" type="com.xjtuse.mall.bean.system.Role">
         <id column="id" property="id" jdbcType="INTEGER" />
@@ -150,16 +237,21 @@
         </where>
     </update>
 
-    <update id="setRoleDeleted">
-        update cskaoyan_mall_role
-        <set>
-            deleted = true,
-            update_time = now()
-        </set>
+    <insert id="insertRole" parameterType="com.xjtuse.mall.bean.system.Role" useGeneratedKeys="true">
+        insert into cskaoyan_mall_role
+        (`name`, `desc`, add_time)
+        values
+        (#{role.name},#{role.desc},now())
+    </insert>
+
+    <delete id="setRoleDeleted">
+        delete from cskaoyan_mall_role
         <where>
             id = #{role.id}
         </where>
-    </update>
+    </delete>
+
+
 
 
 </mapper>

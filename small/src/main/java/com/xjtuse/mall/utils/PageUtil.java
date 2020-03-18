@@ -66,4 +66,14 @@ public class PageUtil {
     public void initStart() {
         this.setStart((this.getPage() -1) * this.getLimit());
     }
+
+    public static PageUtil initPageUtil() {
+        PageUtil pageUtil = new PageUtil();
+        pageUtil.setStart(0);
+        pageUtil.setLimit(20);
+        pageUtil.setPage(1);
+        pageUtil.setSort("id");
+        pageUtil.setOrder("desc");
+        return pageUtil;
+    }
 }
