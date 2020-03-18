@@ -90,6 +90,9 @@ public class PromotionServiceImpl implements PromotionService {
     @Override
     public TResultVo createCoupon(Coupon coupon) {
         coupon.setDeleted(false);
+        Date date = new Date();
+        coupon.setAddTime(date);
+        coupon.setUpdateTime(date);
         mapper.createCoupon(coupon);
         return ResultUtil.genSuccessResult();
     }

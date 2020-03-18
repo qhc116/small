@@ -30,7 +30,7 @@ public class CustomJsonDateDeserializer extends JsonDeserializer<Date> {
         try {
             parse = format.parse(date);
         } catch (ParseException e) {
-            System.out.println("尝试解析日期");;
+            System.out.println("尝试解析日期");
         }
         return parse;
     }
