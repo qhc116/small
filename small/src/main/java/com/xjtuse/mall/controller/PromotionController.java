@@ -104,7 +104,7 @@ public class PromotionController {
 
     //团购规则更新
     @RequestMapping("/groupon/update")
-    public TResultVo updateGrouponRules(@RequestBody GrouponRules rules){
+    public TResultVo updateGrouponRules(@RequestBody GrouponRules rules) throws CustomException {
         return service.updateGrouponRules(rules);
     }
 

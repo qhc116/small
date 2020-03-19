@@ -185,7 +185,14 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public TResultVo updateGrouponRules(GrouponRules rules) {
+    public TResultVo updateGrouponRules(GrouponRules rules) throws CustomException {
+        Goods goods = mapper.queryGoodsById(rules);
+        //商品可能不存在
+        if(goods == null || goods.getName() == null){
+            throw new CustomException("输入的商品ID不存在！");
+        }
+        rules.setGoodsName(goods.getName());
+        rules.setPicUrl(goods.getPicUrl());
         rules.setUpdateTime(new Date());
         mapper.updateGrouponRules(rules);
         return ResultUtil.genSuccessResult();

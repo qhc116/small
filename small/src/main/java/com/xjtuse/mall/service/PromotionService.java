@@ -43,7 +43,7 @@ public interface PromotionService {
 
     MapResultVo queryGrouponRules(PageUtil pageUtil, GrouponRules rules);
 
-    TResultVo updateGrouponRules(GrouponRules rules);
+    TResultVo updateGrouponRules(GrouponRules rules) throws CustomException;
 
     TResultVo deleteGrouponRules(GrouponRules rules);
 
